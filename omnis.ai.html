@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OMNI AI | Professional Automation Agency</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --whatsapp: #25d366;
+            --bg: #030712;
+            --card-bg: #0f172a;
+        }
+
+        body { 
+            background-color: var(--bg); 
+            color: #f3f4f6; 
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            scroll-behavior: smooth;
+        }
+
+        h1, h2, h3, .font-display {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+        }
+
+        .hero-title {
+            font-size: clamp(2.2rem, 7vw, 4.5rem);
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+        }
+
+        /* Glass Styling */
+        .glass {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .glass:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+        }
+
+        /* Stacked Action Buttons */
+        .action-pillar {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            z-index: 9999;
+        }
+
+        .float-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            color: white;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .float-btn:hover { transform: scale(1.1) rotate(5deg); }
+        .bg-wa { background-color: var(--whatsapp); }
+        .bg-omni { background-color: var(--primary); }
+
+        /* Chat Window Alignment */
+        #chat-window {
+            display: none;
+            position: fixed;
+            bottom: 100px; /* Above the stacked buttons */
+            right: 25px;
+            width: calc(100% - 50px);
+            max-width: 400px;
+            height: 550px;
+            max-height: 75vh;
+            background: var(--card-bg);
+            border-radius: 24px;
+            z-index: 10000;
+            flex-direction: column;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+
+        #chat-window.active { display: flex; animation: slideUp 0.4s ease forwards; }
+
+        @keyframes slideUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* High Visibility Inputs */
+        .form-input {
+            background: #1e293b;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            width: 100%;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .form-input:focus { border-color: var(--primary); }
+
+        .btn-main {
+            background: var(--primary);
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-weight: 700;
+            transition: all 0.3s;
+        }
+
+        .btn-main:hover { filter: brightness(1.2); transform: translateY(-2px); }
+
+        /* Counter Styles */
+        #limit-bar {
+            background: #1e1b4b;
+            color: #a5b4fc;
+            font-size: 0.75rem;
+            padding: 4px 16px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            font-weight: 600;
+            letter-spacing: 0.05em;
+        }
+        
+        /* Limit Reached Overlay Styles */
+        #limit-overlay {
+            display: none;
+            padding: 20px;
+            background: #111827;
+            text-align: center;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="fixed w-full top-0 z-50 glass py-4 px-6 md:px-16 flex justify-between items-center border-none">
+        <div class="flex items-center gap-2">
+            <div style="width: 100px;" ><img src="omni.png" style="width: auto; height: auto;"></div>
+            
+        </div>
+        <div class="hidden md:flex gap-10 text-sm font-semibold uppercase tracking-widest text-gray-400">
+            <a href="#services" class="hover:text-white transition">Capabilities</a>
+            <a href="#pricing" class="hover:text-white transition">Plans</a>
+            <a href="mailto:taiwoemmanuel435@gmail.com" class="hover:text-white transition">Direct</a>
+        </div>
+        <a href="https://wa.me/2348120505881?text=Hi%20Omni%20sent%20me!%20I%20am%20ready%20to%20start." class="text-xs font-bold bg-white text-black px-6 py-2 rounded-full uppercase">Contact</a>
+    </nav>
+
+    <section class="min-h-screen flex flex-col justify-center items-center text-center px-6 pt-20">
+        <div class="mb-6 px-4 py-1 rounded-full border border-indigo-500/30 bg-indigo-500/10 text-indigo-400 text-xs font-bold uppercase tracking-widest">
+            Now Powered by Omni Engine v4.0
+        </div>
+        <h1 class="hero-title max-w-4xl mb-8">
+            Superior AI Chatbots for <br><span class="text-indigo-500">Modern Business.</span>
+        </h1>
+        <p class="text-gray-400 text-lg md:text-xl max-w-2xl mb-12">
+            Build, deploy, and scale intelligent automation across WhatsApp, Discord, and Instagram. 
+            Experience human-like interaction with 24/7 efficiency.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-5">
+            <button onclick="toggleChat()" class="btn-main text-lg">Initialize Agent</button>
+            <a href="#pricing" class="glass px-10 py-4 rounded-xl font-bold text-lg flex items-center justify-center">View Packages</a>
+        </div>
+    </section>
+
+    <section id="services" class="py-24 px-6 max-w-7xl mx-auto">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div class="glass p-10 rounded-[2rem]">
+                <i class="fab fa-whatsapp text-4xl text-green-500 mb-6"></i>
+                <h3 class="text-xl mb-3">WhatsApp</h3>
+                <p class="text-gray-400 text-sm">Direct sales and support automation for global reach.</p>
+            </div>
+            <div class="glass p-10 rounded-[2rem]">
+                <i class="fab fa-instagram text-4xl text-pink-500 mb-6"></i>
+                <h3 class="text-xl mb-3">Instagram</h3>
+                <p class="text-gray-400 text-sm">Smart DM engagement to scale your personal brand.</p>
+            </div>
+            <div class="glass p-10 rounded-[2rem]">
+                <i class="fab fa-discord text-4xl text-blue-500 mb-6"></i>
+                <h3 class="text-xl mb-3">Discord</h3>
+                <p class="text-gray-400 text-sm">Automated server management and community growth.</p>
+            </div>
+            <div class="glass p-10 rounded-[2rem]">
+                <i class="fas fa-terminal text-4xl text-indigo-500 mb-6"></i>
+                <h3 class="text-xl mb-3">API Custom</h3>
+                <p class="text-gray-400 text-sm">Tailored solutions for complex developer workflows.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="pricing" class="py-24 px-6">
+        <div class="max-w-7xl mx-auto text-center">
+            <h2 class="text-4xl md:text-5xl mb-16">Selected Plans</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="glass p-10 rounded-[2.5rem] text-left">
+                    <h3 class="text-xl text-indigo-400 font-bold mb-2">AI STARTER</h3>
+                    <p class="text-sm text-gray-500 mb-8 font-bold">ESSENTIAL AUTOMATION</p>
+                    <div class="text-5xl font-bold mb-2">$150</div>
+                    <div class="text-gray-500 line-through text-sm mb-10">Regular $188</div>
+                    <ul class="space-y-4 text-sm text-gray-400 mb-12">
+                        <li>- 1 Targeted Platform</li>
+                        <li>- 50 FAQ Training</li>
+                        <li>- Branded Persona</li>
+                    </ul>
+                    <button onclick="toggleChat()" class="w-full py-4 rounded-xl border border-white/10 font-bold hover:bg-white hover:text-black transition">Select Plan</button>
+                </div>
+                <div class="glass p-10 rounded-[2.5rem] text-left border-indigo-500 bg-indigo-500/5 relative">
+                    <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-indigo-600 px-4 py-1 rounded-full text-[10px] font-bold">RECOMMENDED</div>
+                    <h3 class="text-xl text-indigo-400 font-bold mb-2">AI GROWTH</h3>
+                    <p class="text-sm text-gray-500 mb-8 font-bold">BUSINESS SCALE</p>
+                    <div class="text-5xl font-bold mb-2">$400</div>
+                    <div class="text-gray-500 line-through text-sm mb-10">Regular $500</div>
+                    <ul class="space-y-4 text-sm text-gray-300 mb-12">
+                        <li>- 3 Integrated Platforms</li>
+                        <li>- 200 FAQ Training</li>
+                        <li>- AI Image Generation</li>
+                        <li>- Usage Analytics</li>
+                    </ul>
+                    <button onclick="toggleChat()" class="w-full py-4 rounded-xl bg-indigo-600 font-bold text-white">Select Plan</button>
+                </div>
+                <div class="glass p-10 rounded-[2.5rem] text-left">
+                    <h3 class="text-xl text-indigo-400 font-bold mb-2">AI PRO</h3>
+                    <p class="text-sm text-gray-500 mb-8 font-bold">UNLIMITED ACCESS</p>
+                    <div class="text-5xl font-bold mb-2">$1,000</div>
+                    <div class="text-gray-500 line-through text-sm mb-10">Regular $1,250</div>
+                    <ul class="space-y-4 text-sm text-gray-400 mb-12">
+                        <li>- All Social Platforms</li>
+                        <li>- AI Video Generation</li>
+                        <li>- CRM & Payment Setup</li>
+                        <li>- Priority Support</li>
+                    </ul>
+                    <button onclick="toggleChat()" class="w-full py-4 rounded-xl border border-white/10 font-bold hover:bg-white hover:text-black transition">Select Plan</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-24 px-6 max-w-4xl mx-auto text-center">
+        <h2 class="text-3xl font-bold mb-4 uppercase tracking-tighter">Join the AI Revolution</h2>
+        <p class="text-gray-400 mb-10">Subscribe for early access to new automation features.</p>
+        <form action="https://formspree.io/f/YOUR_ID" method="POST" class="flex flex-col sm:flex-row gap-4">
+            <input type="email" name="email" required placeholder="name@email.com" class="form-input">
+            <button type="submit" class="btn-main whitespace-nowrap">Subscribe Now</button>
+        </form>
+    </section>
+
+    <footer class="py-12 border-t border-white/5 text-center text-gray-600 text-sm">
+        <p>© 2024 Omni AI Agency | taiwoemmanuel435@gmail.com</p>
+    </footer>
+
+    <div class="action-pillar">
+        <a href="https://wa.me/2348120505881" target="_blank" class="float-btn bg-wa">
+            <i class="fab fa-whatsapp"></i>
+        </a>
+        <button onclick="toggleChat()" class="float-btn bg-omni">
+            <i class="fas fa-robot"></i>
+        </button>
+    </div>
+
+    <div id="chat-window">
+        <div class="p-6 bg-indigo-600 flex justify-between items-center text-white">
+            <div class="flex items-center gap-3">
+                <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                <span class="font-bold">Omni Core AI</span>
+            </div>
+            <button onclick="toggleChat()" class="opacity-70 hover:opacity-100"><i class="fas fa-times"></i></button>
+        </div>
+
+        <div id="limit-bar">FREE TRIAL CREDITS: 5 / 5</div>
+
+        <div id="chat-history" class="flex-grow p-6 overflow-y-auto space-y-4 text-sm bg-gray-950">
+            <div class="bg-gray-800 p-4 rounded-2xl rounded-tl-none max-w-[85%] text-gray-200">
+                Connection established. I am Omni. I help developers and creators scale with AI. 
+                What platform can I automate for you today?
+            </div>
+        </div>
+
+        <div id="input-container" class="p-4 bg-gray-900 border-t border-white/5 flex gap-3">
+            <input type="text" id="user-input" placeholder="Ask Omni anything..." class="flex-grow bg-transparent outline-none text-sm text-white">
+            <button onclick="sendMessage()" class="text-indigo-500 hover:text-indigo-400 transition">
+                <i class="fas fa-paper-plane text-lg"></i>
+            </button>
+        </div>
+
+        <div id="limit-overlay">
+            <div class="text-red-400 font-bold mb-2">TRIAL LIMIT REACHED</div>
+            <p class="text-xs text-gray-400 mb-4">You have used your 5 free messages. Upgrade now for unlimited AI access.</p>
+            <a href="https://wa.me/2348120505881?text=Hi%20Omni%20sent%20me!%20I%20am%20ready%20to%20start." 
+               target="_blank" 
+               class="inline-block w-full py-3 bg-green-500 rounded-xl font-bold text-white text-sm hover:bg-green-600 transition">
+               <i class="fab fa-whatsapp mr-2"></i> Message Developer
+            </a>
+            
+        </div>
+    </div>
+
+    <script>
+        const chatWindow = document.getElementById('chat-window');
+        const history = document.getElementById('chat-history');
+        const input = document.getElementById('user-input');
+        const sessionId = "omni_web_" + Math.random().toString(36).substr(2, 9);
+        
+        // --- LIMIT LOGIC VARIABLES ---
+        const MAX_MESSAGES = 5;
+        const STORAGE_KEY = 'omni_chat_count_v1';
+        let msgCount = localStorage.getItem(STORAGE_KEY) ? parseInt(localStorage.getItem(STORAGE_KEY)) : 0;
+
+        // Initialize State on Load
+        updateLimitUI();
+
+        function toggleChat() { chatWindow.classList.toggle('active'); }
+
+        async function sendMessage() {
+            // 1. Check Limit Before Sending
+            if (msgCount >= MAX_MESSAGES) {
+                updateLimitUI();
+                return;
+            }
+
+            const text = input.value.trim();
+            if (!text) return;
+            
+            // 2. Append User Message
+            appendMessage(text, 'user');
+            input.value = '';
+
+            // 3. Increment Limit & Save
+            msgCount++;
+            localStorage.setItem(STORAGE_KEY, msgCount);
+            updateLimitUI();
+
+            try {
+                // Production Webhook URL
+                const response = await fetch('https://artifexai.app.n8n.cloud/webhook/omni-chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: text, sessionId: sessionId })
+                });
+                const data = await response.text();
+                appendMessage(data, 'bot');
+            } catch (err) {
+                appendMessage("Syncing with core... please repeat your message.", 'bot');
+            }
+        }
+
+        function appendMessage(text, side) {
+            const div = document.createElement('div');
+            div.className = side === 'user' 
+                ? "bg-indigo-600 p-4 rounded-2xl rounded-tr-none self-end ml-auto shadow-lg" 
+                : "bg-gray-800 p-4 rounded-2xl rounded-tl-none max-w-[85%] text-gray-200";
+            
+            // RENDERS HTML BUTTONS AND LINE BREAKS CORRECTLY
+            div.innerHTML = text.replace(/\n/g, '<br>');
+            
+            history.appendChild(div);
+            history.scrollTop = history.scrollHeight;
+        }
+
+        // --- NEW: UPDATE UI FOR LIMITS ---
+        function updateLimitUI() {
+            const remaining = MAX_MESSAGES - msgCount;
+            const bar = document.getElementById('limit-bar');
+            
+            // Update Bar Text
+            bar.textContent = `FREE TRIAL CREDITS: ${remaining} / ${MAX_MESSAGES}`;
+            
+            // Check if limit reached
+            if (msgCount >= MAX_MESSAGES) {
+                bar.style.color = '#f87171'; // Red text
+                bar.textContent = "LIMIT REACHED";
+                document.getElementById('input-container').style.display = 'none';
+                document.getElementById('limit-overlay').style.display = 'block';
+            } else {
+                bar.style.color = '#a5b4fc'; // Normal Indigo
+                document.getElementById('input-container').style.display = 'flex';
+                document.getElementById('limit-overlay').style.display = 'none';
+            }
+        }
+
+        // --- NEW: RESET FUNCTION (For Testing) ---
+        function resetLimit() {
+            localStorage.setItem(STORAGE_KEY, 0);
+            location.reload();
+        }
+
+        input.addEventListener("keypress", (e) => { if (e.key === "Enter") sendMessage(); });
+    </script>
+</body>
+</html>
