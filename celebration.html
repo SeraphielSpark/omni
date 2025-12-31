@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎆 2026 COUNTDOWN - LIVE</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;600;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* RESET */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            background: #000;
+            color: white;
+            font-family: 'Exo 2', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* FIXED BACKGROUND */
+        .bg-gradient {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(0, 100, 255, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(255, 0, 100, 0.15) 0%, transparent 50%),
+                linear-gradient(180deg, #000010 0%, #000020 100%);
+            z-index: 1;
+        }
+
+        /* START SCREEN */
+        #start-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 1s ease;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .start-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(3rem, 10vw, 5rem);
+            font-weight: 900;
+            background: linear-gradient(45deg, #00f3ff, #ff00ff, #ffd700);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+        }
+
+        .start-subtitle {
+            font-size: clamp(1rem, 3vw, 1.5rem);
+            color: #00f3ff;
+            letter-spacing: 4px;
+            margin-bottom: 40px;
+            text-transform: uppercase;
+        }
+
+        .start-btn {
+            background: transparent;
+            border: 3px solid #00f3ff;
+            color: white;
+            padding: 20px 60px;
+            font-size: 1.5rem;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 30px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .start-btn:hover {
+            background: rgba(0, 243, 255, 0.1);
+            box-shadow: 0 0 30px rgba(0, 243, 255, 0.5);
+            transform: scale(1.05);
+        }
+
+        .start-btn:active {
+            transform: scale(0.98);
+        }
+
+        .start-btn i {
+            margin-right: 10px;
+        }
+
+        /* MAIN CONTAINER - FIXED 720P YOUTUBE */
+        .main-container {
+            position: relative;
+            z-index: 50;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            display: none;
+        }
+
+        /* YOUTUBE MONITOR - FIXED 720P SIZE */
+        .youtube-monitor {
+            width: 100%;
+            max-width: 1280px; /* 16:9 ratio for 720p */
+            height: 720px; /* FIXED 720px height */
+            background: #000;
+            border: 3px solid #00f3ff;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 30px;
+            box-shadow: 0 0 50px rgba(0, 243, 255, 0.3);
+            position: relative;
+        }
+
+        /* Force YouTube to fill 720px container */
+        #yt-player {
+            width: 100% !important;
+            height: 100% !important;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        /* Countdown */
+        .countdown-container {
+            display: flex;
+            gap: 25px;
+            background: rgba(0, 10, 30, 0.9);
+            padding: 25px 40px;
+            border-radius: 15px;
+            border: 2px solid rgba(255, 215, 0, 0.5);
+            backdrop-filter: blur(10px);
+        }
+
+        .time-block {
+            text-align: center;
+            min-width: 110px;
+        }
+
+        .time-number {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 4rem;
+            font-weight: 900;
+            color: white;
+            line-height: 1;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+            margin-bottom: 10px;
+        }
+
+        .time-label {
+            font-size: 0.9rem;
+            color: #ffd700;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-weight: 600;
+        }
+
+        .time-separator {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3rem;
+            color: #00f3ff;
+            align-self: center;
+            margin: 0 5px;
+        }
+
+        /* Celebration Screen */
+        #celebration-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 200;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.9);
+            text-align: center;
+            padding: 20px;
+        }
+
+        .celebration-2026 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(6rem, 20vw, 12rem);
+            font-weight: 900;
+            background: linear-gradient(45deg, #ffd700, #ff9900, #ff3366);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 20px;
+            animation: celebrationPulse 1s infinite alternate;
+        }
+
+        @keyframes celebrationPulse {
+            0% { transform: scale(1); text-shadow: 0 0 30px rgba(255, 215, 0, 0.5); }
+            100% { transform: scale(1.05); text-shadow: 0 0 80px rgba(255, 215, 0, 0.8); }
+        }
+
+        .celebration-text {
+            font-size: clamp(2rem, 5vw, 3rem);
+            color: #00f3ff;
+            text-transform: uppercase;
+            letter-spacing: 8px;
+            margin-top: 20px;
+        }
+
+        /* Fireworks Overlay */
+        #fireworks-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 150;
+            opacity: 0;
+            transition: opacity 1s ease;
+            pointer-events: none;
+        }
+
+        #fireworks-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Controls */
+        .controls {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 300;
+            display: flex;
+            gap: 15px;
+        }
+
+        .control-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #00f3ff;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .control-btn:hover {
+            background: rgba(0, 243, 255, 0.2);
+            transform: scale(1.1);
+        }
+
+        /* Status */
+        .status-bar {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            color: #00f3ff;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            z-index: 300;
+        }
+
+        /* Loading Animation */
+        .loader {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(0, 243, 255, 0.3);
+            border-top: 4px solid #00f3ff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 20px 0;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive Design - MAINTAIN 720P ON MOBILE */
+        @media (max-width: 1280px) {
+            .youtube-monitor {
+                max-width: 1280px; /* Maintain aspect ratio */
+                height: 720px; /* STILL 720px height */
+            }
+        }
+
+        @media (max-width: 768px) {
+            /* On tablets, keep 720p but adjust width */
+            .youtube-monitor {
+                width: 100%;
+                height: 720px; /* STILL 720px height */
+                max-width: none;
+            }
+            
+            .countdown-container {
+                gap: 15px;
+                padding: 20px;
+            }
+            
+            .time-block {
+                min-width: 80px;
+            }
+            
+            .time-number {
+                font-size: 3rem;
+            }
+            
+            .time-label {
+                font-size: 0.7rem;
+                letter-spacing: 2px;
+            }
+            
+            .time-separator {
+                font-size: 2rem;
+            }
+            
+            .controls {
+                bottom: 20px;
+                right: 20px;
+            }
+            
+            .status-bar {
+                bottom: 20px;
+                left: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            /* On mobile, STILL 720px height but full width */
+            .youtube-monitor {
+                height: 720px; /* STILL 720px height */
+                margin-bottom: 20px;
+            }
+            
+            .countdown-container {
+                gap: 10px;
+                padding: 15px;
+            }
+            
+            .time-block {
+                min-width: 70px;
+            }
+            
+            .time-number {
+                font-size: 2.5rem;
+            }
+            
+            .time-label {
+                font-size: 0.6rem;
+                letter-spacing: 1px;
+            }
+            
+            .start-btn {
+                padding: 15px 40px;
+                font-size: 1.2rem;
+            }
+            
+            .celebration-2026 {
+                font-size: 5rem;
+            }
+            
+            .celebration-text {
+                font-size: 1.5rem;
+                letter-spacing: 4px;
+            }
+        }
+
+        /* For very small screens, allow vertical scrolling but keep 720p */
+        @media (max-height: 800px) {
+            body {
+                overflow-y: auto;
+            }
+            
+            .main-container {
+                padding-top: 50px;
+                padding-bottom: 100px;
+            }
+        }
+
+        /* Utility Classes */
+        .hidden {
+            display: none !important;
+        }
+
+        .fade-out {
+            opacity: 0 !important;
+        }
+
+        .visible {
+            display: flex !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Background -->
+    <div class="bg-gradient"></div>
+    
+    <!-- Start Screen -->
+    <div id="start-screen">
+        <div class="start-title">2026 COUNTDOWN</div>
+        <div class="start-subtitle">LIVE BROADCAST</div>
+        <div class="loader"></div>
+        <div id="system-status" style="color:#888; margin:20px 0; max-width:500px; line-height:1.5;">
+            Initializing live broadcast system...
+        </div>
+        <button class="start-btn" id="start-button">
+            <i class="fas fa-satellite"></i> START LIVE COUNTDOWN
+        </button>
+    </div>
+    
+    <!-- Main Interface -->
+    <div class="main-container" id="main-container">
+        <!-- FIXED 720P YOUTUBE PLAYER -->
+        <div class="youtube-monitor">
+            <div id="yt-player"></div>
+        </div>
+        
+        <!-- Countdown -->
+        <div class="countdown-container">
+            <div class="time-block">
+                <div class="time-number" id="days">00</div>
+                <div class="time-label">DAYS</div>
+            </div>
+            
+            <div class="time-separator">:</div>
+            
+            <div class="time-block">
+                <div class="time-number" id="hours">00</div>
+                <div class="time-label">HOURS</div>
+            </div>
+            
+            <div class="time-separator">:</div>
+            
+            <div class="time-block">
+                <div class="time-number" id="minutes">00</div>
+                <div class="time-label">MINUTES</div>
+            </div>
+            
+            <div class="time-separator">:</div>
+            
+            <div class="time-block">
+                <div class="time-number" id="seconds">00</div>
+                <div class="time-label">SECONDS</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Celebration Screen -->
+    <div id="celebration-screen">
+        <div class="celebration-2026">2026</div>
+        <div class="celebration-text">HAPPY NEW YEAR</div>
+        <div class="celebration-text" style="font-size:1.5rem; margin-top:30px; color:#ffd700;">
+            Welcome to the Future
+        </div>
+    </div>
+    
+    <!-- Fireworks Overlay -->
+    <div id="fireworks-overlay">
+        <video id="fireworks-video" muted loop playsinline preload="auto">
+            <source src="https://assets.mixkit.co/videos/4156/4156-720.mp4" type="video/mp4">
+        </video>
+    </div>
+    
+    <!-- Controls -->
+    <div class="controls">
+        <button class="control-btn" id="music-toggle" title="Toggle Music">
+            <i class="fas fa-music"></i>
+        </button>
+        <button class="control-btn" id="sfx-toggle" title="Toggle Sound Effects">
+            <i class="fas fa-volume-up"></i>
+        </button>
+        <button class="control-btn" onclick="testCelebration()" title="Test Celebration">
+            <i class="fas fa-bolt"></i>
+        </button>
+    </div>
+    
+    <!-- Status -->
+    <div class="status-bar" id="status-bar">System Ready</div>
+    
+    <!-- Audio Elements -->
+    <audio id="bg-music" preload="auto" loop>
+        <source src="tech-music.mp3" type="audio/mp3">
+    </audio>
+    <audio id="firework-sfx" preload="auto">
+        <source src="fireworks.mp3" type="audio/mp3">
+    </audio>
+    <audio id="countdown-sfx" preload="auto">
+        <source src="countdown.mp3" type="audio/mp3">
+    </audio>
+    <audio id="start-sfx" preload="auto">
+        <source src="transition.mp3" type="audio/mp3">
+    </audio>
+    
+    <!-- YouTube API -->
+    <script src="https://www.youtube.com/iframe_api"></script>
+    
+    <script>
+        // ========== CONFIGURATION ==========
+        const CONFIG = {
+            TARGET_DATE: new Date("January 1, 2026 00:00:00").getTime(),
+            YOUTUBE_ID: 'EBYaCXoIaK8',
+            YOUTUBE_HEIGHT: 720, // FIXED HEIGHT
+            MUSIC_VOLUME: 0.5,
+            SFX_VOLUME: 0.7
+        };
+
+        // ========== GLOBAL STATE ==========
+        let state = {
+            active: false,
+            celebrating: false,
+            musicEnabled: true,
+            sfxEnabled: true,
+            player: null,
+            countdownInterval: null,
+            lastSecond: 0
+        };
+
+        // ========== YOUTUBE PLAYER ==========
+        function onYouTubeIframeAPIReady() {
+            // Create YouTube player with FIXED 720p dimensions
+            const playerWidth = '500px'// Math.min(1280, window.innerWidth - 40); // 16:9 ratio for 720p
+            const playerHeight = CONFIG.YOUTUBE_HEIGHT;
+            
+            state.player = new YT.Player('yt-player', {
+                height: playerHeight,
+                width: playerWidth,
+                videoId: CONFIG.YOUTUBE_ID,
+                playerVars: {
+                    'autoplay': 1,
+                    'controls': 0,
+                    'rel': 0,
+                    'modestbranding': 1,
+                    'playsinline': 1,
+                    'enablejsapi': 1
+                },
+                events: {
+                    'onReady': onPlayerReady,
+                    'onStateChange': onPlayerStateChange
+                }
+            });
+        }
+
+        function onPlayerReady(event) {
+            updateStatus("YouTube player ready - 720p HD");
+            document.getElementById('system-status').innerHTML = 
+                '<span style="color:#00ff88">✅ Live broadcast ready! Click START to begin countdown.</span>';
+            document.getElementById('start-button').style.borderColor = "#00ff88";
+        }
+
+        function onPlayerStateChange(event) {
+            // Optional: Handle player state changes
+        }
+
+        // ========== SYSTEM START ==========
+        function startSystem() {
+            console.log("🚀 Starting countdown system...");
+            
+            // Prevent multiple starts
+            if (state.active) return;
+            state.active = true;
+            
+            // Play start sound
+            playSound('start-sfx');
+            
+            // Start YouTube video
+            if (state.player && typeof state.player.playVideo === 'function') {
+                state.player.playVideo();
+                state.player.unMute();
+                state.player.setVolume(80);
+            }
+            
+            // Fade out start screen
+            const startScreen = document.getElementById('start-screen');
+            startScreen.classList.add('fade-out');
+            
+            // Show main interface
+            setTimeout(() => {
+                startScreen.classList.add('hidden');
+                document.getElementById('main-container').style.display = 'flex';
+                
+                // Start countdown
+                startCountdown();
+                
+                // Start background music
+                if (state.musicEnabled) {
+                    const music = document.getElementById('bg-music');
+                    music.volume = CONFIG.MUSIC_VOLUME;
+                    music.play().catch(e => {
+                        console.log("Music autoplay blocked");
+                        updateStatus("Click music button to enable audio");
+                    });
+                }
+                
+                updateStatus("LIVE: Countdown to 2026");
+                
+                // Force YouTube to maintain 720p
+                resizeYouTubePlayer();
+                
+            }, 1000);
+        }
+
+        // ========== COUNTDOWN SYSTEM ==========
+        function startCountdown() {
+            // Update immediately
+            updateCountdown();
+            
+            // Update every second
+            state.countdownInterval = setInterval(updateCountdown, 1000);
+        }
+
+        function updateCountdown() {
+            const now = Date.now();
+            const distance = CONFIG.TARGET_DATE - now;
+            
+            // Check if time's up
+            if (distance < 0) {
+                clearInterval(state.countdownInterval);
+                startCelebration();
+                return;
+            }
+            
+            // Calculate time units
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            
+            // Update display
+            document.getElementById('days').textContent = days.toString().padStart(2, '0');
+            document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+            document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+            document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+            
+            // Last 10 seconds beep
+            if (distance < 11000 && distance > 0) {
+                if (seconds !== state.lastSecond) {
+                    state.lastSecond = seconds;
+                    
+                    if (state.sfxEnabled && seconds <= 10 && seconds > 0) {
+                        playSound('countdown-sfx');
+                        
+                        // Visual pulse effect
+                        const secEl = document.getElementById('seconds');
+                        secEl.style.transform = 'scale(1.3)';
+                        setTimeout(() => secEl.style.transform = 'scale(1)', 200);
+                    }
+                }
+            }
+            
+            // Update status message
+            updateCountdownStatus(days, hours, minutes, seconds);
+        }
+
+        function updateCountdownStatus(d, h, m, s) {
+            let status = '';
+            if (d > 0) {
+                status = `LIVE: ${d} days ${h} hours until 2026`;
+            } else if (h > 0) {
+                status = `LIVE: ${h}h ${m}m ${s}s until 2026`;
+            } else if (m > 0) {
+                status = `LIVE: ${m}m ${s}s until 2026`;
+            } else {
+                status = `LIVE: ${s} seconds until 2026!`;
+            }
+            document.getElementById('status-bar').textContent = status;
+        }
+
+        // ========== CELEBRATION SYSTEM ==========
+        function startCelebration() {
+            if (state.celebrating) return;
+            state.celebrating = true;
+            
+            console.log("🎉 CELEBRATION STARTED!");
+            
+            // Hide main interface
+            document.getElementById('main-container').style.opacity = '0';
+            
+            // Stop YouTube video
+            if (state.player) {
+                state.player.pauseVideo();
+            }
+            
+            // Show fireworks video
+            const fireworksOverlay = document.getElementById('fireworks-overlay');
+            const fireworksVideo = document.getElementById('fireworks-video');
+            
+            fireworksVideo.play().then(() => {
+                fireworksOverlay.style.opacity = '1';
+            }).catch(e => {
+                console.log("Fireworks autoplay failed, showing anyway");
+                fireworksOverlay.style.opacity = '1';
+            });
+            
+            // Show celebration screen
+            setTimeout(() => {
+                document.getElementById('main-container').style.display = 'none';
+                document.getElementById('celebration-screen').style.display = 'flex';
+                
+                // Play celebration sounds
+                if (state.sfxEnabled) {
+                    playSound('firework-sfx');
+                }
+                
+                if (state.musicEnabled) {
+                    const music = document.getElementById('bg-music');
+                    music.volume = 0.7;
+                    music.play().catch(e => console.log("Music play failed"));
+                }
+                
+                // Launch massive confetti
+                launchConfetti();
+                
+                updateStatus("🎊 HAPPY NEW YEAR 2026! 🎊");
+                
+            }, 1000);
+        }
+
+        function launchConfetti() {
+            const duration = 60 * 1000;
+            const end = Date.now() + duration;
+            const colors = ['#00f3ff', '#ffd700', '#ff00ff', '#ffffff', '#00ff88'];
+            
+            (function frame() {
+                // Left side confetti
+                confetti({
+                    particleCount: 10,
+                    angle: 60,
+                    spread: 80,
+                    origin: { x: 0 },
+                    colors: colors
+                });
+                
+                // Right side confetti
+                confetti({
+                    particleCount: 10,
+                    angle: 120,
+                    spread: 80,
+                    origin: { x: 1 },
+                    colors: colors
+                });
+                
+                // Random center bursts
+                if (Math.random() < 0.15) {
+                    confetti({
+                        particleCount: 200,
+                        spread: 120,
+                        origin: { x: 0.5, y: 0.5 },
+                        colors: colors
+                    });
+                }
+                
+                if (Date.now() < end) {
+                    requestAnimationFrame(frame);
+                }
+            }());
+        }
+
+        // ========== AUDIO SYSTEM ==========
+        function playSound(soundId) {
+            if (!state.sfxEnabled) return;
+            
+            const sound = document.getElementById(soundId);
+            if (sound) {
+                sound.currentTime = 0;
+                sound.volume = CONFIG.SFX_VOLUME;
+                sound.play().catch(e => console.log(`Sound ${soundId} failed:`, e));
+            }
+        }
+
+        function setupAudioControls() {
+            // Music toggle
+            document.getElementById('music-toggle').addEventListener('click', function() {
+                const music = document.getElementById('bg-music');
+                const icon = this.querySelector('i');
+                
+                if (state.musicEnabled) {
+                    music.pause();
+                    icon.className = 'fas fa-music-slash';
+                    state.musicEnabled = false;
+                    this.style.borderColor = '#ff3366';
+                } else {
+                    music.play().catch(e => console.log("Music play failed"));
+                    icon.className = 'fas fa-music';
+                    state.musicEnabled = true;
+                    this.style.borderColor = '#00f3ff';
+                }
+            });
+            
+            // SFX toggle
+            document.getElementById('sfx-toggle').addEventListener('click', function() {
+                const icon = this.querySelector('i');
+                
+                if (state.sfxEnabled) {
+                    icon.className = 'fas fa-volume-mute';
+                    state.sfxEnabled = false;
+                    this.style.borderColor = '#ff3366';
+                } else {
+                    icon.className = 'fas fa-volume-up';
+                    state.sfxEnabled = true;
+                    this.style.borderColor = '#00f3ff';
+                }
+            });
+        }
+
+        // ========== YOUTUBE RESIZE FUNCTION ==========
+        function resizeYouTubePlayer() {
+            // Force YouTube player to maintain 720p height
+            const monitor = document.querySelector('.youtube-monitor');
+            if (monitor) {
+                monitor.style.height = 500 + 'px';
+            }
+            
+            // Also resize the iframe if it exists
+            const iframe = document.querySelector('#yt-player iframe');
+            if (iframe) {
+                iframe.style.height = 500 + 'px';
+                iframe.style.width = '100%';
+            }
+        }
+
+        // ========== UTILITY FUNCTIONS ==========
+        function updateStatus(message) {
+            console.log(`🔧 ${message}`);
+            document.getElementById('status-bar').textContent = message;
+        }
+
+        function testCelebration() {
+            if (confirm("Initiate test celebration sequence?")) {
+                // Force immediate celebration
+                CONFIG.TARGET_DATE = Date.now() - 1000;
+                if (state.countdownInterval) {
+                    clearInterval(state.countdownInterval);
+                }
+                startCelebration();
+            }
+        }
+
+        // ========== INITIALIZATION ==========
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log("⚡ System initializing...");
+            
+            // Setup start button
+            document.getElementById('start-button').addEventListener('click', startSystem);
+            
+            // Setup audio controls
+            setupAudioControls();
+            
+            // Preload all audio for instant playback
+            const audioElements = document.querySelectorAll('audio');
+            audioElements.forEach(audio => {
+                audio.load();
+            });
+            
+            // Preload fireworks video
+            const fireworksVideo = document.getElementById('fireworks-video');
+            fireworksVideo.load();
+            
+            // Initialize status messages
+            const messages = [
+                "Connecting to global broadcast network...",
+                "Synchronizing time servers...",
+                "Calibrating celebration systems...",
+                "720p HD broadcast ready...",
+                "System primed for New Year 2026!"
+            ];
+            
+            let msgIndex = 0;
+            const statusEl = document.getElementById('system-status');
+            
+            const messageInterval = setInterval(() => {
+                if (statusEl) {
+                    statusEl.innerHTML = messages[msgIndex];
+                    msgIndex = (msgIndex + 1) % messages.length;
+                }
+            }, 2500);
+            
+            // Handle window resize to maintain 720p
+            window.addEventListener('resize', resizeYouTubePlayer);
+            
+            // Handle page visibility for mobile
+            document.addEventListener('visibilitychange', function() {
+                if (document.hidden) {
+                    // Tab hidden - pause music
+                    const music = document.getElementById('bg-music');
+                    if (!music.paused) {
+                        music.dataset.wasPlaying = 'true';
+                        music.pause();
+                    }
+                } else {
+                    // Tab visible - resume if was playing
+                    const music = document.getElementById('bg-music');
+                    if (music.dataset.wasPlaying === 'true' && state.musicEnabled) {
+                        music.play().catch(e => console.log("Resume failed"));
+                        delete music.dataset.wasPlaying;
+                    }
+                }
+            });
+            
+            updateStatus("System initialized - 720p ready");
+        });
+    </script>
+</body>
+</html>
