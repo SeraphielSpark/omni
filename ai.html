@@ -244,19 +244,6 @@
 
     <div id="confetti-container"></div>
 
-    <div id="ny-overlay">
-        <div class="ny-card">
-            <div class="mb-4 text-indigo-400 text-sm font-bold tracking-[0.3em] uppercase">System Update: 2025</div>
-            <h1 class="ny-text">HAPPY NEW YEAR</h1>
-            <p class="text-gray-300 text-lg max-w-md mx-auto leading-relaxed">
-                Wishing you a year of breakthroughs, automation, and limitless scaling. <br>
-                <span class="text-yellow-400 font-bold">Let's build the future together.</span>
-            </p>
-            <button onclick="enterSite()" class="btn-celebrate">
-                Enter OMNI <i class="fas fa-arrow-right ml-2"></i>
-            </button>
-        </div>
-    </div>
 
     <nav class="fixed w-full top-0 z-50 glass py-4 px-6 md:px-16 flex justify-between items-center border-none">
         <div class="flex items-center gap-2">
@@ -488,20 +475,13 @@
             }
         });
 
-        function enterSite() {
-            const overlay = document.getElementById('ny-overlay');
-            if(overlay) {
-                overlay.style.opacity = '0';
-                setTimeout(() => { overlay.style.display = 'none'; }, 800);
-            }
-        }
-
+     
         // --- CHAT LOGIC ---
         const chatWindow = document.getElementById('chat-window');
         const history = document.getElementById('chat-history');
         const input = document.getElementById('user-input');
         const sessionId = "omni_web_" + Math.random().toString(36).substr(2, 9);
-        const MAX_MESSAGES = 5;
+        const MAX_MESSAGES = 6;
         const STORAGE_KEY = 'omni_chat_count_v1';
         let msgCount = localStorage.getItem(STORAGE_KEY) ? parseInt(localStorage.getItem(STORAGE_KEY)) : 0;
 
@@ -577,3 +557,4 @@
     </script>
 </body>
 </html>
+
