@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Seraphiel Spark | Audio Converter</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            /* Brand Colors */
+            --primary: #ff0f5b;
+            --primary-dark: #d60043;
+            --accent: #00f0ff;
+            
+            /* Backgrounds */
+            --bg-deep: #030305;
+            --glass-bg: rgba(20, 20, 25, 0.65);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            
+            /* Text */
+            --text-main: #ffffff;
+            --text-muted: #94a3b8;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-deep);
+            color: var(--text-main);
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* --- BACKGROUND FX --- */
+        .ambient-light {
+            position: fixed;
+            top: -20%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120vw;
+            height: 80vh;
+            background: radial-gradient(circle, rgba(255, 15, 91, 0.15) 0%, transparent 60%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .ambient-secondary {
+            position: fixed;
+            bottom: -20%;
+            right: -10%;
+            width: 80vw;
+            height: 60vh;
+            background: radial-gradient(circle, rgba(0, 240, 255, 0.08) 0%, transparent 60%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* --- NAVBAR --- */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.2rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(3, 3, 5, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            z-index: 100;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .logo {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            letter-spacing: -0.5px;
+        }
+        .logo span { color: var(--primary); }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+        .nav-links a {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+        .nav-links a:hover { color: white; }
+
+        /* Mobile Menu Button (Hidden on Desktop) */
+        .mobile-menu-btn {
+            display: none;
+            font-size: 1.5rem;
+            color: white;
+            cursor: pointer;
+        }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 7rem 1.5rem 4rem;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            line-height: 1.1;
+            margin-bottom: 1rem;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: linear-gradient(135deg, #fff 30%, #a5a5a5 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin-bottom: 3rem;
+        }
+
+        /* --- CONVERTER CARD --- */
+        .converter-box {
+            width: 100%;
+            max-width: 520px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 2.5rem;
+            box-shadow: 0 20px 60px -15px rgba(0,0,0,0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Glowing Border Animation */
+        .converter-box::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 1px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+            opacity: 0.5;
+        }
+
+        /* Input Wrapper */
+        .input-area {
+            position: relative;
+            margin-bottom: 1.2rem;
+        }
+
+        input {
+            width: 100%;
+            padding: 16px 50px 16px 20px;
+            border-radius: 14px;
+            border: 1px solid var(--glass-border);
+            background: rgba(0,0,0,0.3);
+            color: white;
+            font-size: 1rem;
+            font-family: inherit;
+            outline: none;
+            transition: all 0.3s;
+        }
+        input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(255, 15, 91, 0.15);
+        }
+
+        .paste-btn {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        /* Action Button */
+        .btn-main {
+            width: 100%;
+            padding: 16px;
+            border-radius: 14px;
+            border: none;
+            background: linear-gradient(135deg, var(--primary), #ff4d80);
+            color: white;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .btn-main:active { transform: scale(0.98); }
+        .btn-main:disabled { opacity: 0.7; cursor: wait; }
+
+        /* Spinner */
+        .spinner {
+            width: 20px; height: 20px;
+            border: 2.5px solid rgba(255,255,255,0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            display: none;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* --- RESULTS --- */
+        .result-panel {
+            margin-top: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+            opacity: 0;
+        }
+        .result-panel.active {
+            margin-top: 2rem;
+            max-height: 400px;
+            opacity: 1;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .song-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        audio {
+            width: 100%;
+            height: 45px;
+            margin-bottom: 1rem;
+            filter: invert(1) hue-rotate(180deg) saturate(0);
+        }
+
+        .dl-btn {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: 0.2s;
+        }
+        .dl-btn:hover { background: rgba(255,255,255,0.1); }
+
+        .error-toast {
+            background: rgba(220, 38, 38, 0.1);
+            border: 1px solid rgba(220, 38, 38, 0.2);
+            color: #f87171;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        /* --- FEATURES GRID --- */
+        .features {
+            padding: 4rem 5%;
+            background: #08080a;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--glass-border);
+            padding: 2rem;
+            border-radius: 20px;
+            transition: 0.3s;
+        }
+        .card i {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        .card h3 { margin-bottom: 0.5rem; }
+        .card p { color: var(--text-muted); font-size: 0.9rem; }
+
+        /* --- FOOTER --- */
+        footer {
+            padding: 2rem;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            border-top: 1px solid var(--glass-border);
+        }
+
+        /* --- MOBILE OPTIMIZATIONS (The Magic) --- */
+        @media (max-width: 768px) {
+            /* Navbar adjustments */
+            nav { padding: 1rem 1.5rem; }
+            .nav-links { display: none; } /* Hide links on mobile */
+            .mobile-menu-btn { display: block; }
+
+            /* Hero adjustments */
+            .hero { padding: 6rem 1.2rem 3rem; }
+            .hero h1 { font-size: 2.5rem; }
+            .hero p { font-size: 1rem; }
+
+            /* Card adjustments */
+            .converter-box { padding: 1.8rem; }
+            
+            /* Input & Button sizing for touch */
+            input { padding: 14px 45px 14px 16px; font-size: 16px; } /* 16px prevents zoom on iOS */
+            .btn-main { padding: 16px; font-size: 1.05rem; }
+            
+            /* Grid */
+            .grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="ambient-light"></div>
+    <div class="ambient-secondary"></div>
+
+    <nav>
+        <div class="logo">
+            <i class="fa-solid fa-bolt" style="color:var(--primary)"></i> Seraphiel<span>Spark</span>
+        </div>
+        <div class="nav-links">
+            <a href="#features">Features</a>
+            <a href="#guide">How it Works</a>
+        </div>
+        <div class="mobile-menu-btn">
+            <i class="fa-solid fa-bars"></i>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <h1>YouTube to Audio<br><span>Simplified.</span></h1>
+        <p>Premium quality extraction. No ads. No waiting. Just paste your link and get the audio instantly.</p>
+
+        <div class="converter-box">
+            <div class="input-area">
+                <input type="text" id="urlInput" placeholder="Paste YouTube Link..." autocomplete="off">
+                <button class="paste-btn" onclick="pasteClipboard()">
+                    <i class="fa-regular fa-clipboard"></i>
+                </button>
+            </div>
+
+            <button id="convertBtn" class="btn-main" onclick="processVideo()">
+                <span class="btn-text">Extract Audio</span>
+                <div class="spinner"></div>
+            </button>
+
+            <div id="errorDisplay" class="error-toast"></div>
+
+            <div id="resultCard" class="result-panel">
+                <div class="song-title" id="songTitle">Loading Title...</div>
+                
+                <audio id="audioPlayer" controls>
+                    <source id="audioSource" src="" type="audio/mpeg">
+                </audio>
+
+                <a id="downloadLink" href="#" target="_blank" class="dl-btn">
+                    <i class="fa-solid fa-download"></i> Download File
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section class="features" id="features">
+        <div class="grid">
+            <div class="card">
+                <i class="fa-solid fa-rocket"></i>
+                <h3>Lightning Fast</h3>
+                <p>Cloud-based processing ensures your file is ready in milliseconds.</p>
+            </div>
+            <div class="card">
+                <i class="fa-solid fa-lock"></i>
+                <h3>Secure & Private</h3>
+                <p>We do not track your history. Logs are wiped automatically.</p>
+            </div>
+            <div class="card">
+                <i class="fa-solid fa-sliders"></i>
+                <h3>High Fidelity</h3>
+                <p>Extracts the highest bitrate audio available from the source.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 Seraphiel Spark. Built for Creators.</p>
+    </footer>
+
+    <script>
+        const WEBHOOK_URL = "https://seraphielspark.app.n8n.cloud/webhook/get-audio";
+
+        // Elements
+        const urlInput = document.getElementById('urlInput');
+        const convertBtn = document.getElementById('convertBtn');
+        const spinner = document.querySelector('.spinner');
+        const btnText = document.querySelector('.btn-text');
+        const resultCard = document.getElementById('resultCard');
+        const errorDisplay = document.getElementById('errorDisplay');
+        const songTitle = document.getElementById('songTitle');
+        const audioPlayer = document.getElementById('audioPlayer');
+        const audioSource = document.getElementById('audioSource');
+        const downloadLink = document.getElementById('downloadLink');
+
+        async function processVideo() {
+            const url = urlInput.value.trim();
+
+            if (!url) {
+                showError("Please enter a YouTube URL");
+                return;
+            }
+
+            // Loading State
+            setLoading(true);
+            hideError();
+            resultCard.classList.remove('active');
+
+            try {
+                const response = await fetch(WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ url: url })
+                });
+
+                if (!response.ok) throw new Error("Server Error");
+
+                const data = await response.json();
+
+                if (!data.downloadUrl) throw new Error("Conversion failed");
+
+                // Update UI
+                songTitle.innerText = data.title || "Converted Audio Track";
+                audioSource.src = data.downloadUrl;
+                audioPlayer.load();
+                downloadLink.href = data.downloadUrl;
+
+                resultCard.classList.add('active');
+
+            } catch (error) {
+                showError("Could not convert video. Please check the link.");
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        // Helpers
+        function setLoading(state) {
+            convertBtn.disabled = state;
+            spinner.style.display = state ? 'block' : 'none';
+            btnText.style.display = state ? 'none' : 'block';
+        }
+
+        function showError(msg) {
+            errorDisplay.innerText = msg;
+            errorDisplay.style.display = 'block';
+        }
+
+        function hideError() {
+            errorDisplay.style.display = 'none';
+        }
+
+        async function pasteClipboard() {
+            try {
+                const text = await navigator.clipboard.readText();
+                urlInput.value = text;
+            } catch (e) {}
+        }
+
+        urlInput.addEventListener("keypress", (e) => {
+            if(e.key === "Enter") processVideo();
+        });
+    </script>
+</body>
+</html>
