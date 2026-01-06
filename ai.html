@@ -3,47 +3,237 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OMNI AI | Professional Automation Agency</title>
+    <title>Michael | AI & Automation Specialist | Omni AI</title>
     
+    <!-- Fonts & Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
+    
+    <!-- 3D Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.min.js"></script>
+    
     <style>
+        /* Ultra-Premium Variables */
         :root {
             --primary: #4f46e5;
+            --primary-dark: #4338ca;
+            --primary-light: rgba(79, 70, 229, 0.1);
+            --secondary: #9D4EDD;
+            --accent: #fbbf24;
             --whatsapp: #25d366;
-            --bg: #030712;
+            --success: #10b981;
+            --danger: #ef4444;
+            
+            --dark: #030712;
+            --darker: #020617;
             --card-bg: #0f172a;
-            --gold: #fbbf24;
+            --glass-bg: rgba(30, 41, 59, 0.7);
+            --light: #f3f4f6;
+            --gray: #94a3b8;
+            --gray-dark: #475569;
+            
+            --gradient-primary: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            --gradient-gold: linear-gradient(135deg, var(--accent) 0%, #f59e0b 100%);
+            --gradient-dark: linear-gradient(135deg, var(--darker) 0%, var(--dark) 100%);
+            
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+            --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.12);
+            --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.2);
+            --shadow-xl: 0 20px 60px rgba(0, 0, 0, 0.3);
+            --shadow-neon: 0 0 30px rgba(79, 70, 229, 0.4);
+            
+            --border-radius-sm: 8px;
+            --border-radius-md: 16px;
+            --border-radius-lg: 24px;
+            --border-radius-xl: 32px;
+            --border-radius-2xl: 2.5rem;
+            
+            --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-base: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            
+            --container-max: 1440px;
+            --section-spacing: clamp(100px, 10vw, 160px);
         }
 
-        body { 
-            background-color: var(--bg); 
-            color: #f3f4f6; 
-            font-family: 'Inter', sans-serif;
-            line-height: 1.6;
+        /* Reset & Base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        html {
             scroll-behavior: smooth;
-            overflow-x: hidden; /* Prevent horizontal scroll from confetti */
+            scroll-padding-top: 100px;
         }
 
-        h1, h2, h3, .font-display {
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: var(--dark);
+            color: var(--light);
+            overflow-x: hidden;
+            line-height: 1.7;
+            font-weight: 400;
+        }
+
+        h1, h2, h3, h4, h5 {
             font-family: 'Space Grotesk', sans-serif;
             font-weight: 700;
+            line-height: 1.2;
+            letter-spacing: -0.02em;
         }
 
-        .hero-title {
-            font-size: clamp(2.2rem, 7vw, 4.5rem);
-            line-height: 1.1;
-            letter-spacing: -0.02em;
+        /* Premium Typography */
+        .text-gradient {
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: inline-block;
+        }
+
+        .text-gradient-gold {
+            background: var(--gradient-gold);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .text-body {
+            color: var(--gray);
+            font-size: clamp(16px, 1.1vw, 18px);
+            line-height: 1.8;
+        }
+
+        .text-lead {
+            font-size: clamp(18px, 1.3vw, 22px);
+            color: var(--light);
+            font-weight: 400;
+        }
+
+        /* Layout */
+        .container {
+            width: 90%;
+            max-width: var(--container-max);
+            margin: 0 auto;
+            padding: 0 clamp(20px, 2vw, 40px);
+        }
+
+        .container-narrow {
+            max-width: 1000px;
+        }
+
+        section {
+            padding: var(--section-spacing) 0;
+            position: relative;
+        }
+
+        /* 3D Canvas */
+        #threeCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            pointer-events: none;
+        }
+
+        /* Premium Header */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: clamp(20px, 2vw, 30px) 0;
+            background: rgba(3, 7, 18, 0.85);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border-bottom: 1px solid var(--glass-border);
+            transition: var(--transition-base);
+        }
+
+        header.scrolled {
+            padding: clamp(15px, 1.5vw, 20px) 0;
+            background: rgba(3, 7, 18, 0.95);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 40px;
+        }
+
+        .logo {
+            font-size: clamp(28px, 2.5vw, 36px);
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nav-main {
+            display: flex;
+            gap: clamp(20px, 2vw, 40px);
+            align-items: center;
+            flex: 1;
+            justify-content: center;
+        }
+
+        .nav-link {
+            font-weight: 500;
+            font-size: clamp(15px, 1.1vw, 17px);
+            color: var(--gray);
+            position: relative;
+            padding: 8px 4px;
+            transition: var(--transition-fast);
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gradient-primary);
+            border-radius: 1px;
+            transition: var(--transition-base);
+        }
+
+        .nav-link:hover {
+            color: var(--light);
+        }
+
+        .nav-link:hover::after,
+        .nav-link.active::after {
+            width: 100%;
+        }
+
+        .nav-link.active {
+            color: var(--light);
+            font-weight: 600;
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: 20px;
+            align-items: center;
         }
 
         /* Glass Styling */
         .glass {
-            background: rgba(30, 41, 59, 0.7);
+            background: var(--glass-bg);
             backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            transition: all 0.3s ease;
+            border: 1px solid var(--glass-border);
+            transition: all var(--transition-base);
         }
 
         .glass:hover {
@@ -51,7 +241,423 @@
             transform: translateY(-5px);
         }
 
-        /* Stacked Action Buttons */
+        .theme-toggle, .hamburger {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: var(--gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition-base);
+        }
+
+        .theme-toggle:hover, .hamburger:hover {
+            color: var(--light);
+            border-color: var(--primary);
+        }
+
+        .hamburger {
+            display: none;
+            font-size: 20px;
+        }
+
+        /* Premium Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: clamp(16px, 1.2vw, 20px) clamp(32px, 2.5vw, 48px);
+            border-radius: var(--border-radius-xl);
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            font-size: clamp(15px, 1.1vw, 17px);
+            line-height: 1;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: all var(--transition-base);
+            transform-style: preserve-3d;
+            transform-origin: center;
+            letter-spacing: 0.02em;
+            white-space: nowrap;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: inherit;
+            filter: blur(10px);
+            opacity: 0;
+            transition: var(--transition-base);
+            z-index: -1;
+        }
+
+        .btn:hover::before {
+            opacity: 0.6;
+            filter: blur(20px);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px) scale(1.02);
+        }
+
+        .btn:active {
+            transform: translateY(-1px) scale(0.98);
+        }
+
+        /* Button Variants */
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: white;
+            box-shadow: var(--shadow-neon), var(--shadow-lg);
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 0 40px rgba(79, 70, 229, 0.6), var(--shadow-xl);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--light);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-whatsapp {
+            background: var(--whatsapp);
+            color: white;
+        }
+
+        .btn-whatsapp:hover {
+            background: #128C7E;
+        }
+
+        .btn-gold {
+            background: var(--gradient-gold);
+            color: var(--dark);
+        }
+
+        /* Hero Section - Michael */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding-top: clamp(100px, 10vw, 140px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            max-width: 900px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 24px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--border-radius-xl);
+            margin-bottom: 40px;
+            backdrop-filter: blur(10px);
+        }
+
+        .hero-badge-text {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--primary);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .hero-title {
+            font-size: clamp(48px, 5vw, 76px);
+            margin-bottom: clamp(24px, 2vw, 32px);
+            line-height: 1.1;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(20px, 1.8vw, 28px);
+            color: var(--gray);
+            margin-bottom: clamp(32px, 3vw, 48px);
+            font-weight: 400;
+        }
+
+        .hero-description {
+            font-size: clamp(18px, 1.3vw, 22px);
+            color: var(--light);
+            margin-bottom: clamp(40px, 4vw, 60px);
+            max-width: 700px;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 24px;
+            flex-wrap: wrap;
+            margin-bottom: 60px;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .stat-value {
+            font-size: clamp(36px, 3vw, 48px);
+            font-weight: 800;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: var(--gray);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* Section Headers */
+        .section-header {
+            text-align: center;
+            margin-bottom: clamp(60px, 6vw, 100px);
+        }
+
+        .section-title {
+            font-size: clamp(40px, 4vw, 64px);
+            margin-bottom: 20px;
+        }
+
+        .section-subtitle {
+            font-size: clamp(18px, 1.5vw, 24px);
+            color: var(--gray);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Skills Grid */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(350px, 100%), 1fr));
+            gap: 30px;
+        }
+
+        .skill-card {
+            background: var(--card-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--border-radius-lg);
+            padding: clamp(32px, 3vw, 48px);
+            backdrop-filter: blur(10px);
+            transition: var(--transition-base);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .skill-card:hover {
+            transform: translateY(-12px) scale(1.02);
+            border-color: var(--primary);
+            box-shadow: var(--shadow-xl), var(--shadow-neon);
+        }
+
+        .skill-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: var(--border-radius-lg);
+            background: var(--primary-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            color: var(--primary);
+            margin-bottom: 24px;
+        }
+
+        /* Services Grid - Omni AI */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .service-card {
+            background: var(--card-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--border-radius-2xl);
+            padding: 40px;
+            backdrop-filter: blur(10px);
+            transition: var(--transition-base);
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .service-icon {
+            font-size: 48px;
+            margin-bottom: 24px;
+        }
+
+        .service-card:nth-child(1) .service-icon { color: #25d366; }
+        .service-card:nth-child(2) .service-icon { color: #E1306C; }
+        .service-card:nth-child(3) .service-icon { color: #5865F2; }
+        .service-card:nth-child(4) .service-icon { color: var(--primary); }
+
+        /* Pricing Plans - Omni AI */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(350px, 100%), 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .pricing-card {
+            background: var(--card-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--border-radius-2xl);
+            padding: 40px;
+            position: relative;
+            transition: var(--transition-base);
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary);
+        }
+
+        .pricing-card.featured {
+            background: rgba(79, 70, 229, 0.05);
+            border-color: var(--primary);
+            transform: scale(1.05);
+        }
+
+        .pricing-badge {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--primary);
+            color: white;
+            padding: 8px 24px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .pricing-price {
+            font-size: 48px;
+            font-weight: 800;
+            margin: 20px 0;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin: 30px 0;
+        }
+
+        .pricing-features li {
+            padding: 10px 0;
+            color: var(--gray);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .pricing-features li:before {
+            content: '✓';
+            color: var(--success);
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        /* Contact Form */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            margin-top: 50px;
+        }
+
+        .contact-form-wrapper {
+            background: var(--card-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--border-radius-2xl);
+            padding: 40px;
+            backdrop-filter: blur(10px);
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 12px;
+            font-weight: 500;
+            color: var(--light);
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 16px 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            color: var(--light);
+            font-size: 16px;
+            font-family: 'Inter', sans-serif;
+            transition: var(--transition-base);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        textarea.form-control {
+            min-height: 160px;
+            resize: vertical;
+        }
+
+        /* Chat Window - Omni AI */
         .action-pillar {
             position: fixed;
             bottom: 25px;
@@ -73,17 +679,26 @@
             color: white;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
             transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: none;
+            cursor: pointer;
         }
 
-        .float-btn:hover { transform: scale(1.1) rotate(5deg); }
-        .bg-wa { background-color: var(--whatsapp); }
-        .bg-omni { background-color: var(--primary); }
+        .float-btn:hover { 
+            transform: scale(1.1) rotate(5deg); 
+        }
 
-        /* Chat Window Alignment */
+        .float-btn-wa { 
+            background-color: var(--whatsapp); 
+        }
+
+        .float-btn-omni { 
+            background-color: var(--primary); 
+        }
+
         #chat-window {
             display: none;
             position: fixed;
-            bottom: 100px; /* Above the stacked buttons */
+            bottom: 100px;
             right: 25px;
             width: calc(100% - 50px);
             max-width: 400px;
@@ -94,468 +709,1119 @@
             z-index: 10000;
             flex-direction: column;
             overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--glass-border);
             box-shadow: 0 20px 50px rgba(0,0,0,0.5);
         }
 
-        #chat-window.active { display: flex; animation: slideUp 0.4s ease forwards; }
+        #chat-window.active { 
+            display: flex; 
+            animation: slideUp 0.4s ease forwards; 
+        }
 
         @keyframes slideUp {
             from { transform: translateY(30px); opacity: 0; }
             to { transform: translateY(0); opacity: 1; }
         }
 
-        /* High Visibility Inputs */
-        .form-input {
-            background: #1e293b;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 1rem 1.5rem;
-            border-radius: 12px;
-            width: 100%;
-            outline: none;
-            transition: border-color 0.3s;
-        }
-
-        .form-input:focus { border-color: var(--primary); }
-
-        .btn-main {
+        .chat-header {
+            padding: 20px;
             background: var(--primary);
-            padding: 1rem 2rem;
-            border-radius: 12px;
-            font-weight: 700;
-            transition: all 0.3s;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .btn-main:hover { filter: brightness(1.2); transform: translateY(-2px); }
+        #chat-history {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background: var(--dark);
+        }
 
-        /* Counter Styles */
+        .chat-message {
+            margin-bottom: 15px;
+            padding: 12px 16px;
+            border-radius: 18px;
+            max-width: 85%;
+        }
+
+        .chat-message.bot {
+            background: var(--card-bg);
+            color: var(--light);
+            border-top-left-radius: 4px;
+        }
+
+        .chat-message.user {
+            background: var(--primary);
+            color: white;
+            margin-left: auto;
+            border-top-right-radius: 4px;
+        }
+
+        .chat-input-container {
+            padding: 20px;
+            background: var(--card-bg);
+            border-top: 1px solid var(--glass-border);
+            display: flex;
+            gap: 12px;
+        }
+
+        #user-input {
+            flex: 1;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            color: var(--light);
+            font-size: 14px;
+        }
+
+        #user-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
         #limit-bar {
             background: #1e1b4b;
             color: #a5b4fc;
-            font-size: 0.75rem;
-            padding: 4px 16px;
+            font-size: 12px;
+            padding: 12px;
             text-align: center;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
+            border-bottom: 1px solid var(--glass-border);
             font-weight: 600;
             letter-spacing: 0.05em;
         }
-        
-        /* Limit Reached Overlay Styles */
+
         #limit-overlay {
-            display: none;
             padding: 20px;
-            background: #111827;
+            background: rgba(239, 68, 68, 0.1);
             text-align: center;
-            border-top: 1px solid rgba(255,255,255,0.1);
+            border-top: 1px solid rgba(239, 68, 68, 0.2);
+            display: none;
         }
 
-        /* --- NEW YEAR CELEBRATION STYLES --- */
-        #confetti-container {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none; /* Allows clicking through the sparkles */
-            z-index: 99999; /* On top of everything */
-            overflow: hidden;
+        /* Footer */
+        footer {
+            background: var(--darker);
+            padding: 80px 0 40px;
+            border-top: 1px solid var(--glass-border);
         }
 
-        #ny-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(3, 7, 18, 0.95);
-            z-index: 100000; /* Highest priority for the card */
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+
+        .footer-logo {
+            font-size: clamp(28px, 2.5vw, 32px);
+            font-weight: 900;
+            margin-bottom: 20px;
+        }
+
+        .footer-about {
+            color: var(--gray);
+            margin-bottom: 30px;
+            max-width: 400px;
+        }
+
+        .social-links {
             display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            text-align: center;
-            backdrop-filter: blur(15px);
-            transition: opacity 0.8s ease;
+            gap: 16px;
+            margin-top: 24px;
         }
 
-        .ny-card {
-            background: linear-gradient(145deg, rgba(30,41,59,0.9), rgba(15,23,42,0.9));
-            border: 1px solid rgba(251, 191, 36, 0.3); /* Gold border */
-            padding: 3rem;
-            border-radius: 2rem;
-            box-shadow: 0 0 50px rgba(79, 70, 229, 0.3);
-            position: relative;
-            animation: floatCard 6s ease-in-out infinite;
-            max-width: 90%;
-            pointer-events: auto; /* Re-enable clicks for the card */
-        }
-
-        @keyframes floatCard {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-
-        .ny-text {
-            font-family: 'Space Grotesk', sans-serif;
-            background: linear-gradient(to right, #fff, #fbbf24, #fff);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            font-size: clamp(2rem, 5vw, 4rem);
-            font-weight: 800;
-            margin-bottom: 1rem;
-            animation: shine 3s linear infinite;
-            background-size: 200%;
-        }
-
-        @keyframes shine {
-            to { background-position: 200% center; }
-        }
-
-        /* Confetti Particles */
-        .confetti {
-            position: absolute;
-            width: 6px;
-            height: 6px;
+        .social-link {
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
-            pointer-events: none;
-            animation: fall linear forwards;
+            background: rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gray);
+            transition: var(--transition-base);
         }
 
-        @keyframes fall {
-            to { transform: translateY(100vh) rotate(720deg); opacity: 0; }
-        }
-
-        .btn-celebrate {
-            background: linear-gradient(90deg, var(--primary), #4338ca);
+        .social-link:hover {
+            background: var(--gradient-primary);
             color: white;
-            padding: 1rem 3rem;
-            border-radius: 50px;
-            font-weight: bold;
-            font-size: 1.1rem;
-            margin-top: 2rem;
-            border: 1px solid rgba(255,255,255,0.2);
-            cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 0 20px rgba(79, 70, 229, 0.5);
+            transform: translateY(-4px);
         }
-        
-        .btn-celebrate:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 30px rgba(251, 191, 36, 0.6); /* Gold glow on hover */
+
+        .copyright {
+            text-align: center;
+            padding-top: 40px;
+            border-top: 1px solid var(--glass-border);
+            color: var(--gray);
+            font-size: 14px;
+        }
+
+        /* Mobile Menu */
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--dark);
+            z-index: 9999;
+            padding: 100px 40px 40px;
+            transform: translateX(-100%);
+            transition: var(--transition-slow);
+            overflow-y: auto;
+        }
+
+        .mobile-menu.active {
+            transform: translateX(0);
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .contact-grid, .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .pricing-card.featured {
+                transform: none;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .nav-main {
+                display: none;
+            }
+            
+            .hamburger {
+                display: flex;
+            }
+            
+            .hero-actions {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .hero-actions .btn {
+                width: 100%;
+                max-width: 320px;
+            }
+            
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 30px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-stats {
+                flex-direction: column;
+                gap: 24px;
+            }
+            
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .skills-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            #chat-window {
+                width: calc(100% - 30px);
+                right: 15px;
+                bottom: 90px;
+            }
+            
+            .action-pillar {
+                bottom: 20px;
+                right: 20px;
+            }
+        }
+
+        /* Animations */
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .floating-element {
+            position: absolute;
+            border-radius: var(--border-radius-lg);
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(10px);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .floating-1 {
+            width: 120px;
+            height: 120px;
+            top: 20%;
+            right: 10%;
+            animation-delay: 0s;
+        }
+
+        .floating-2 {
+            width: 80px;
+            height: 80px;
+            bottom: 30%;
+            left: 5%;
+            animation-delay: 2s;
         }
     </style>
 </head>
 <body>
-
-    <div id="confetti-container"></div>
-
-
-    <nav class="fixed w-full top-0 z-50 glass py-4 px-6 md:px-16 flex justify-between items-center border-none">
-        <div class="flex items-center gap-2">
-            <div class="">
-            <img style="width: 100px;" src="omni.png"/> 
-        </div>
-        </div>
-        <div class="hidden md:flex gap-10 text-sm font-semibold uppercase tracking-widest text-gray-400">
-            <a href="#services" class="hover:text-white transition">Capabilities</a>
-            <a href="#pricing" class="hover:text-white transition">Plans</a>
-            <a href="mailto:taiwoemmanuel435@gmail.com" class="hover:text-white transition">Direct</a>
-        </div>
-        <a href="https://wa.me/2348120505881?text=Hi%20Omni%20sent%20me!%20I%20am%20ready%20to%20start." class="text-xs font-bold bg-white text-black px-6 py-2 rounded-full uppercase">Contact</a>
-    </nav>
-
-    <section class="min-h-screen flex flex-col justify-center items-center text-center px-6 pt-20">
-        <div class="mb-6 px-4 py-1 rounded-full border border-indigo-500/30 bg-indigo-500/10 text-indigo-400 text-xs font-bold uppercase tracking-widest">
-            Now Powered by Omni Engine v4.0
-        </div>
-        <h1 class="hero-title max-w-4xl mb-8">
-            Superior AI Chatbots for <br><span class="text-indigo-500">Modern Business.</span>
-        </h1>
-        <p class="text-gray-400 text-lg md:text-xl max-w-2xl mb-12">
-            Build, deploy, and scale intelligent automation across WhatsApp, Discord, and Instagram. 
-            Experience human-like interaction with 24/7 efficiency.
-        </p>
-        <div class="flex flex-col sm:flex-row gap-5">
-            <button onclick="toggleChat()" class="btn-main text-lg">Initialize Agent</button>
-            <a href="#pricing" class="glass px-10 py-4 rounded-xl font-bold text-lg flex items-center justify-center">View Packages</a>
-        </div>
-    </section>
-
-    <section id="services" class="py-24 px-6 max-w-7xl mx-auto">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <div class="glass p-10 rounded-[2rem]">
-                <i class="fab fa-whatsapp text-4xl text-green-500 mb-6"></i>
-                <h3 class="text-xl mb-3">WhatsApp</h3>
-                <p class="text-gray-400 text-sm">Direct sales and support automation for global reach.</p>
-            </div>
-            <div class="glass p-10 rounded-[2rem]">
-                <i class="fab fa-instagram text-4xl text-pink-500 mb-6"></i>
-                <h3 class="text-xl mb-3">Instagram</h3>
-                <p class="text-gray-400 text-sm">Smart DM engagement to scale your personal brand.</p>
-            </div>
-            <div class="glass p-10 rounded-[2rem]">
-                <i class="fab fa-discord text-4xl text-blue-500 mb-6"></i>
-                <h3 class="text-xl mb-3">Discord</h3>
-                <p class="text-gray-400 text-sm">Automated server management and community growth.</p>
-            </div>
-            <div class="glass p-10 rounded-[2rem]">
-                <i class="fas fa-terminal text-4xl text-indigo-500 mb-6"></i>
-                <h3 class="text-xl mb-3">API Custom</h3>
-                <p class="text-gray-400 text-sm">Tailored solutions for complex developer workflows.</p>
-            </div>
-        </div>
-    </section>
-
-    <section id="pricing" class="py-24 px-6">
-        <div class="max-w-7xl mx-auto text-center">
-            <h2 class="text-4xl md:text-5xl mb-16">Selected Plans</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="glass p-10 rounded-[2.5rem] text-left">
-                    <h3 class="text-xl text-indigo-400 font-bold mb-2">AI STARTER</h3>
-                    <p class="text-sm text-gray-500 mb-8 font-bold">ESSENTIAL AUTOMATION</p>
-                    <div class="text-5xl font-bold mb-2">$150</div>
-                    <div class="text-gray-500 line-through text-sm mb-10">Regular $188</div>
-                    <ul class="space-y-4 text-sm text-gray-400 mb-12">
-                        <li>- 1 Targeted Platform</li>
-                        <li>- 50 FAQ Training</li>
-                        <li>- Branded Persona</li>
-                    </ul>
-                    <button onclick="toggleChat()" class="w-full py-4 rounded-xl border border-white/10 font-bold hover:bg-white hover:text-black transition">Select Plan</button>
-                </div>
-                <div class="glass p-10 rounded-[2.5rem] text-left border-indigo-500 bg-indigo-500/5 relative">
-                    <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-indigo-600 px-4 py-1 rounded-full text-[10px] font-bold">RECOMMENDED</div>
-                    <h3 class="text-xl text-indigo-400 font-bold mb-2">AI GROWTH</h3>
-                    <p class="text-sm text-gray-500 mb-8 font-bold">BUSINESS SCALE</p>
-                    <div class="text-5xl font-bold mb-2">$400</div>
-                    <div class="text-gray-500 line-through text-sm mb-10">Regular $500</div>
-                    <ul class="space-y-4 text-sm text-gray-300 mb-12">
-                        <li>- 3 Integrated Platforms</li>
-                        <li>- 200 FAQ Training</li>
-                        <li>- AI Image Generation</li>
-                        <li>- Usage Analytics</li>
-                    </ul>
-                    <button onclick="toggleChat()" class="w-full py-4 rounded-xl bg-indigo-600 font-bold text-white">Select Plan</button>
-                </div>
-                <div class="glass p-10 rounded-[2.5rem] text-left">
-                    <h3 class="text-xl text-indigo-400 font-bold mb-2">AI PRO</h3>
-                    <p class="text-sm text-gray-500 mb-8 font-bold">UNLIMITED ACCESS</p>
-                    <div class="text-5xl font-bold mb-2">$1,000</div>
-                    <div class="text-gray-500 line-through text-sm mb-10">Regular $1,250</div>
-                    <ul class="space-y-4 text-sm text-gray-400 mb-12">
-                        <li>- All Social Platforms</li>
-                        <li>- AI Video Generation</li>
-                        <li>- CRM & Payment Setup</li>
-                        <li>- Priority Support</li>
-                    </ul>
-                    <button onclick="toggleChat()" class="w-full py-4 rounded-xl border border-white/10 font-bold hover:bg-white hover:text-black transition">Select Plan</button>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="contact" class="py-24 px-6">
-        <div class="max-w-3xl mx-auto">
-            <div class="glass p-8 md:p-12 rounded-[2.5rem] relative overflow-hidden">
+    <!-- 3D Background Canvas -->
+    <div id="threeCanvas"></div>
+    
+    <!-- Header -->
+    <header id="header">
+        <div class="container">
+            <nav class="navbar">
+                <a href="#" class="logo">
+                    <i class="fas fa-robot" style="color: var(--primary);"></i>
+                    <span class="text-gradient">Omni's | Michael</span>
+                </a>
                 
-                <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-32 bg-indigo-500/20 blur-[80px] -z-10"></div>
+                <div class="nav-main">
+                    <a href="#home" class="nav-link active">Home</a>
+                    <a href="#skills" class="nav-link">AI Skills</a>
+                    <a href="#omni" class="nav-link">Omni AI</a>
+                    <a href="#contact" class="nav-link">Contact</a>
+                </div>
+                
+                <div class="nav-actions">
+                    <button class="hamburger" id="hamburger">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </nav>
+        </div>
+    </header>
+    
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="container">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px;">
+                <div class="logo text-gradient">
+                    <i class="fas fa-robot"></i> Michael
+                </div>
+                <button class="theme-toggle" id="mobileMenuClose">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 40px;">
+                <a href="#home" class="nav-link" style="display: block; padding: 20px; background: var(--glass-bg); border-radius: var(--border-radius-md);">Home</a>
+                <a href="#skills" class="nav-link" style="display: block; padding: 20px; background: var(--glass-bg); border-radius: var(--border-radius-md);">AI Skills</a>
+                <a href="#omni" class="nav-link" style="display: block; padding: 20px; background: var(--glass-bg); border-radius: var(--border-radius-md);">Omni AI</a>
+                <a href="#projects" class="nav-link" style="display: block; padding: 20px; background: var(--glass-bg); border-radius: var(--border-radius-md);">Projects</a>
+                <a href="#contact" class="nav-link" style="display: block; padding: 20px; background: var(--glass-bg); border-radius: var(--border-radius-md);">Contact</a>
+            </div>
+            
+            <div style="margin-top: 40px; padding-top: 40px; border-top: 1px solid var(--glass-border);">
+                <div style="display: flex; gap: 20px;">
+                    <a href="https://calendly.com/taiwoemmanuel435/30min" class="btn btn-primary" style="width: 100%;">Book Call</a>
+                    <a href="https://wa.me/2348120505881" class="btn btn-whatsapp" style="width: 100%;">
+                        <i class="fab fa-whatsapp"></i> WhatsApp
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <span class="hero-badge-text">AI & Automation Specialist</span>
+                    <i class="fas fa-bolt" style="color: var(--accent);"></i>
+                </div>
+                
+                <h1 class="hero-title">
+                    Hello, I'm <span class="text-gradient">Michael</span>
+                </h1>
+                
+                <p class="hero-subtitle">
+                    Building Intelligent Systems & Omni AI Agency
+                </p>
+                
+                <p class="hero-description">
+                    I create advanced AI solutions, automation systems, and intelligent agents that drive innovation. 
+                    Founder of Omni AI Agency, delivering cutting-edge automation for businesses worldwide.
+                </p>
+                
+                <div class="hero-actions">
+                    <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+                        <a href="#contact" class="btn btn-primary">
+                            <i class="fas fa-paper-plane"></i> Start Project
+                        </a>
+                        <a href="#omni" class="btn btn-secondary">
+                            <i class="fas fa-robot"></i> View Omni AI
+                        </a>
+                        <a href="https://calendly.com/taiwoemmanuel435/30min" target="_blank" class="btn glass" style="border: 1px solid var(--glass-border);">
+                            <i class="fas fa-calendar"></i> Book 30-min Call
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <div class="stat-value">50+</div>
+                        <div class="stat-label">AI Projects</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">99%</div>
+                        <div class="stat-label">Client Satisfaction</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">24/7</div>
+                        <div class="stat-label">System Uptime</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">3.2k</div>
+                        <div class="stat-label">Hours of AI Dev</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Floating Elements -->
+        <div class="floating-element floating-1" style="border-radius: 50%;"><img style="border-radius: 50%;" width="100%" src="image.jpg"/></div>
+        <div class="floating-element floating-2" style="border-radius: 50%;"><img style="border-radius: 50%;" width="100%" src="image.jpg"/></div>
+    </section>
+    
+    <!-- AI Skills Section -->
+    <section id="skills">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title text-gradient">AI Expertise</h2>
+                <p class="section-subtitle">
+                    Mastery across the full spectrum of artificial intelligence development
+                </p>
+            </div>
+            
+            <div class="skills-grid">
+                <div class="skill-card">
+                    <div class="skill-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3 style="font-size: clamp(22px, 1.8vw, 28px); margin-bottom: 16px;">Machine Learning</h3>
+                    <p style="color: var(--gray); margin-bottom: 24px;">
+                        Developing predictive models and algorithms that learn from data to make intelligent decisions.
+                    </p>
+                    <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                        <span style="padding: 6px 16px; background: rgba(255, 255, 255, 0.05); border-radius: var(--border-radius-xl); font-size: 13px; color: var(--gray);">TensorFlow</span>
+                        <span style="padding: 6px 16px; background: rgba(255, 255, 255, 0.05); border-radius: var(--border-radius-xl); font-size: 13px; color: var(--gray);">PyTorch</span>
+                        <span style="padding: 6px 16px; background: rgba(255, 255, 255, 0.05); border-radius: var(--border-radius-xl); font-size: 13px; color: var(--gray);">Scikit-learn</span>
+                    </div>
+                </div>
+                
+                <div class="skill-card">
+                    <div class="skill-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h3 style="font-size: clamp(22px, 1.8vw, 28px); margin-bottom: 16px;">AI Agents</h3>
+                    <p style="color: var(--gray); margin-bottom: 24px;">
+                        Building autonomous agents capable of reasoning, decision-making, and complex task execution.
+                    </p>
+                    <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                        <span style="padding: 6px 16px; background: rgba(255, 255, 255, 0.05); border-radius: var(--border-radius-xl); font-size: 13px; color: var(--gray);">Reinforcement Learning</span>
+                        <span style="padding: 6px 16px; background: rgba(255, 255, 255, 0.05); border-radius: var(--border-radius-xl); font-size: 13px; color: var(--gray);">Autonomous Systems</span>
+                        <span style="padding: 6px 16px; background: rgba(255, 255, 255, 0.05); border-radius: var(--border-radius-xl); font-size: 13px; color: var(--gray);">Decision Trees</span>
+                    </div>
+                </div>
+                
+                <div class="skill-card">
+                    <div class="skill-icon">
+                        <i class="fas fa-cogs"></i>
+                    </div>
+                    <h3 style="font-size: clamp(22px, 1.8vw, 28px); margin-bottom: 16px;">Process Automation</h3>
+                    <p style="color: var(--gray); margin-bottom: 24px;">
+                        Creating intelligent automation systems that optimize workflows and eliminate manual processes.
+                    </p>
+                    <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                        <span style="padding: 6px 16px; background: rgba(255, 255, 255, 0.05); border-radius: var(--border-radius-xl); font-size: 13px; color: var(--gray);">RPA</span>
+                        <span style="padding: 6px 16px; background: rgba(255, 255, 255, 0.05); border-radius: var(--border-radius-xl); font-size: 13px; color: var(--gray);">Workflow Optimization</span>
+                        <span style="padding: 6px 16px; background: rgba(255, 255, 255, 0.05); border-radius: var(--border-radius-xl); font-size: 13px; color: var(--gray);">System Integration</span>
+                    </div>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <h3 style="font-size: clamp(22px, 1.8vw, 28px); margin-bottom: 16px;">Web Development</h3>
+                    <p style="color: var(--gray); margin-bottom: 24px;">
+                        Creating highly designed UI/UX website that display the true value of AI.
+                    </p>
+                    <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                        <span style="padding: 6px 16px; background: rgba(255, 255, 255, 0.05); border-radius: var(--border-radius-xl); font-size: 13px; color: var(--gray);">HTML</span>
+                        <span style="padding: 6px 16px; background: rgba(255, 255, 255, 0.05); border-radius: var(--border-radius-xl); font-size: 13px; color: var(--gray);">JavaScript</span>
+                        <span style="padding: 6px 16px; background: rgba(255, 255, 255, 0.05); border-radius: var(--border-radius-xl); font-size: 13px; color: var(--gray);">React JS</span>
+                    </div>
+                </div>
 
-                <div class="text-center mb-10">
-                    <h2 class="text-3xl md:text-4xl font-bold mb-4 font-display">Start Your Project</h2>
-                    <p class="text-gray-400 text-sm md:text-base">
-                        Fill out the form below to send a direct request to our engineering team.
+            </div>
+        </div>
+    </section>
+    
+    <!-- Omni AI Agency Section -->
+    <section id="omni" style="background: rgba(15, 23, 42, 0.5);">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title text-gradient">Omni AI Agency</h2>
+                <p class="section-subtitle">
+                    Superior AI Chatbots and Automation Solutions for Modern Business
+                </p>
+            </div>
+            
+            <!-- Services -->
+            <div class="services-grid">
+                <div class="service-card glass">
+                    <div class="service-icon">
+                        <i class="fab fa-whatsapp"></i>
+                    </div>
+                    <h3 style="font-size: 24px; margin-bottom: 12px;">WhatsApp</h3>
+                    <p style="color: var(--gray); font-size: 14px;">
+                        Direct sales and support automation for global reach with 24/7 availability.
                     </p>
                 </div>
-
-                <form action="https://formspree.io/f/mgovwodj" method="POST" class="space-y-6">
+                
+                <div class="service-card glass">
+                    <div class="service-icon">
+                        <i class="fab fa-instagram"></i>
+                    </div>
+                    <h3 style="font-size: 24px; margin-bottom: 12px;">Instagram</h3>
+                    <p style="color: var(--gray); font-size: 14px;">
+                        Smart DM engagement to scale your personal brand and automate responses.
+                    </p>
+                </div>
+                
+                <div class="service-card glass">
+                    <div class="service-icon">
+                        <i class="fab fa-discord"></i>
+                    </div>
+                    <h3 style="font-size: 24px; margin-bottom: 12px;">Discord</h3>
+                    <p style="color: var(--gray); font-size: 14px;">
+                        Automated server management and community growth with AI moderation.
+                    </p>
+                </div>
+                
+                <div class="service-card glass">
+                    <div class="service-icon">
+                        <i class="fas fa-terminal"></i>
+                    </div>
+                    <h3 style="font-size: 24px; margin-bottom: 12px;">API Custom</h3>
+                    <p style="color: var(--gray); font-size: 14px;">
+                        Tailored solutions for complex developer workflows and enterprise integration.
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Pricing Plans -->
+            <div style="margin-top: 100px;">
+                <div class="section-header">
+                    <h3 class="section-title" style="font-size: clamp(32px, 3vw, 48px);">AI Automation Packages</h3>
+                    <p class="section-subtitle">
+                        Select the perfect plan for your business automation needs
+                    </p>
+                </div>
+                
+                <div class="pricing-grid">
+                    <div class="pricing-card glass">
+                        <h3 style="font-size: 20px; color: var(--primary); font-weight: bold; margin-bottom: 8px;">AI STARTER</h3>
+                        <p style="font-size: 12px; color: var(--gray-dark); margin-bottom: 8px; font-weight: bold;">ESSENTIAL AUTOMATION</p>
+                        <div class="pricing-price">$150</div>
+                        <p style="color: var(--gray); text-decoration: line-through; font-size: 14px; margin-bottom: 40px;">Regular $188</p>
+                        
+                        <ul class="pricing-features">
+                            <li>1 Targeted Platform</li>
+                            <li>50 FAQ Training</li>
+                            <li>Branded Persona</li>
+                            <li>Basic Analytics</li>
+                            <li>Email Support</li>
+                        </ul>
+                        
+                        <button onclick="toggleChat()" class="btn" style="width: 100%; border: 1px solid var(--glass-border);">Select Plan</button>
+                    </div>
                     
-                    <label class="block">
-                        <span class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 ml-1">Your Email</span>
-                        <input 
-                            type="email" 
-                            name="email" 
-                            required 
-                            placeholder="ceo@company.com" 
-                            class="form-input"
-                            style="background: rgba(15, 23, 42, 0.6);"
-                        >
-                    </label>
-
-                    <label class="block">
-                        <span class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 ml-1">Project Details</span>
-                        <textarea 
-                            name="message" 
-                            required 
-                            rows="4" 
-                            placeholder="Tell us about the automation you need..." 
-                            class="form-input"
-                            style="background: rgba(15, 23, 42, 0.6); resize: none;"
-                        ></textarea>
-                    </label>
-
-                    <button type="submit" class="w-full btn-main flex justify-center items-center gap-2 group">
-                        <span>Send Request</span>
-                        <i class="fas fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
-                    </button>
-
-                </form>
+                    <div class="pricing-card glass featured">
+                        <div class="pricing-badge">RECOMMENDED</div>
+                        <h3 style="font-size: 20px; color: var(--primary); font-weight: bold; margin-bottom: 8px;">AI GROWTH</h3>
+                        <p style="font-size: 12px; color: var(--gray-dark); margin-bottom: 8px; font-weight: bold;">BUSINESS SCALE</p>
+                        <div class="pricing-price">$400</div>
+                        <p style="color: var(--gray); text-decoration: line-through; font-size: 14px; margin-bottom: 40px;">Regular $500</p>
+                        
+                        <ul class="pricing-features">
+                            <li>3 Integrated Platforms</li>
+                            <li>200 FAQ Training</li>
+                            <li>AI Image Generation</li>
+                            <li>Advanced Analytics</li>
+                            <li>Priority Support</li>
+                        </ul>
+                        
+                        <button onclick="toggleChat()" class="btn btn-primary" style="width: 100%;">Select Plan</button>
+                    </div>
+                    
+                    <div class="pricing-card glass">
+                        <h3 style="font-size: 20px; color: var(--primary); font-weight: bold; margin-bottom: 8px;">AI PRO</h3>
+                        <p style="font-size: 12px; color: var(--gray-dark); margin-bottom: 8px; font-weight: bold;">UNLIMITED ACCESS</p>
+                        <div class="pricing-price">$1,000</div>
+                        <p style="color: var(--gray); text-decoration: line-through; font-size: 14px; margin-bottom: 40px;">Regular $1,250</p>
+                        
+                        <ul class="pricing-features">
+                            <li>All Social Platforms</li>
+                            <li>AI Video Generation</li>
+                            <li>CRM & Payment Setup</li>
+                            <li>Real-time Analytics</li>
+                            <li>24/7 Priority Support</li>
+                        </ul>
+                        
+                        <button onclick="toggleChat()" class="btn" style="width: 100%; border: 1px solid var(--glass-border);">Select Plan</button>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
-
-    <footer class="py-12 border-t border-white/5 text-center text-gray-600 text-sm">
-        <p>© 2024 Omni AI Agency | taiwoemmanuel435@gmail.com</p>
+    
+    
+    <!-- Contact Section -->
+    <section id="contact">
+        <div class="container container-narrow">
+            <div class="section-header">
+                <h2 class="section-title text-gradient">Start Your AI Project</h2>
+                <p class="section-subtitle">
+                    Let's discuss how intelligent systems can transform your business
+                </p>
+            </div>
+            
+            <div class="contact-grid">
+                <div style="display: flex; flex-direction: column; gap: 30px;">
+                    <div class="glass" style="padding: 30px; border-radius: var(--border-radius-lg);">
+                        <div style="width: 56px; height: 56px; border-radius: var(--border-radius-lg); background: var(--primary-light); display: flex; align-items: center; justify-content: center; font-size: 24px; color: var(--primary); margin-bottom: 20px;">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <h3 style="font-size: clamp(18px, 1.5vw, 22px); margin-bottom: 8px;">Email</h3>
+                        <p style="color: var(--gray);">taiwoemmanuel435@gmail.com</p>
+                    </div>
+                    
+                    <div class="glass" style="padding: 30px; border-radius: var(--border-radius-lg);">
+                        <div style="width: 56px; height: 56px; border-radius: var(--border-radius-lg); background: var(--primary-light); display: flex; align-items: center; justify-content: center; font-size: 24px; color: var(--primary); margin-bottom: 20px;">
+                            <i class="fab fa-whatsapp"></i>
+                        </div>
+                        <h3 style="font-size: clamp(18px, 1.5vw, 22px); margin-bottom: 8px;">WhatsApp</h3>
+                        <p style="color: var(--gray);">+234 812 050 5881</p>
+                    </div>
+                    
+                    <div class="glass" style="padding: 30px; border-radius: var(--border-radius-lg);">
+                        <div style="width: 56px; height: 56px; border-radius: var(--border-radius-lg); background: var(--primary-light); display: flex; align-items: center; justify-content: center; font-size: 24px; color: var(--primary); margin-bottom: 20px;">
+                            <i class="fas fa-calendar"></i>
+                        </div>
+                        <h3 style="font-size: clamp(18px, 1.5vw, 22px); margin-bottom: 8px;">Calendly</h3>
+                        <p style="color: var(--gray);">Book a 30-minute consultation call</p>
+                        <a href="https://calendly.com/taiwoemmanuel435/30min" target="_blank" class="btn btn-primary" style="margin-top: 20px; width: 100%;">
+                            <i class="fas fa-calendar"></i> Schedule Call
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="contact-form-wrapper glass">
+                    <form action="https://formspree.io/f/mgovwodj" method="POST" class="contact-form">
+                        <div class="form-group">
+                            <label for="name" class="form-label">Your Name</label>
+                            <input type="text" id="name" name="name" class="form-control" required placeholder="John Smith">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email" class="form-label">Your Email</label>
+                            <input type="email" id="email" name="email" class="form-control" required placeholder="john@example.com">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="service" class="form-label">Service Needed</label>
+                            <select id="service" name="service" class="form-control" required>
+                                <option value="">Select AI Service</option>
+                                <option value="ai-development">AI Development</option>
+                                <option value="omni-ai">Omni AI Automation</option>
+                                <option value="consulting">AI Strategy Consulting</option>
+                                <option value="custom">Custom AI Solution</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="budget" class="form-label">Budget Range</label>
+                            <select id="budget" name="budget" class="form-control" required>
+                                <option value="">Select Budget</option>
+                                <option value="1k-5k">$1,000 - $5,000</option>
+                                <option value="5k-15k">$5,000 - $15,000</option>
+                                <option value="15k-50k">$15,000 - $50,000</option>
+                                <option value="50k+">$50,000+</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="message" class="form-label">Project Details</label>
+                            <textarea id="message" name="message" class="form-control" required placeholder="Describe your AI project requirements..."></textarea>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">
+                            <i class="fas fa-paper-plane"></i> Send Project Inquiry
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <div class="footer-logo text-gradient">
+                        <i class="fas fa-robot"></i> Michael
+                    </div>
+                    <p class="footer-about">
+                        Emmanuel Oluwasegun Taiwo | AI & Automation Specialist<br>
+                        Founder of Omni AI Agency
+                    </p>
+                    <div class="social-links">
+                        <a href="https://www.linkedin.com/in/emmanuel-oluwasegun-taiwo-73a137229" class="social-link" target="_blank">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                        <a href="https://wa.me/2348120505881" class="social-link" target="_blank">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+                        <a href="mailto:taiwoemmanuel435@gmail.com" class="social-link">
+                            <i class="fas fa-envelope"></i>
+                        </a>
+                        <a href="https://github.com/seraphielspark" class="social-link" target="_blank">
+                            <i class="fab fa-github"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 style="font-size: clamp(18px, 1.5vw, 20px); margin-bottom: 24px;">Quick Links</h3>
+                    <ul style="list-style: none;">
+                        <li style="margin-bottom: 12px;"><a href="#home" style="color: var(--gray); text-decoration: none; transition: var(--transition-fast);">Home</a></li>
+                        <li style="margin-bottom: 12px;"><a href="#skills" style="color: var(--gray); text-decoration: none; transition: var(--transition-fast);">AI Skills</a></li>
+                        <li style="margin-bottom: 12px;"><a href="#omni" style="color: var(--gray); text-decoration: none; transition: var(--transition-fast);">Omni AI</a></li>
+                        <li style="margin-bottom: 12px;"><a href="#contact" style="color: var(--gray); text-decoration: none; transition: var(--transition-fast);">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 style="font-size: clamp(18px, 1.5vw, 20px); margin-bottom: 24px;">Services</h3>
+                    <ul style="list-style: none;">
+                        <li style="margin-bottom: 12px; color: var(--gray);">AI Development</li>
+                        <li style="margin-bottom: 12px; color: var(--gray);">Process Automation</li>
+                        <li style="margin-bottom: 12px; color: var(--gray);">Omni AI Chatbots</li>
+                        <li style="margin-bottom: 12px; color: var(--gray);">AI Consulting</li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 style="font-size: clamp(18px, 1.5vw, 20px); margin-bottom: 24px;">Contact Info</h3>
+                    <ul style="list-style: none;">
+                        <li style="margin-bottom: 12px; color: var(--gray);">taiwoemmanuel435@gmail.com</li>
+                        <li style="margin-bottom: 12px; color: var(--gray);">+234 812 050 5881</li>
+                        <li style="margin-bottom: 12px;">
+                            <a href="https://calendly.com/taiwoemmanuel435/30min" style="color: var(--primary); text-decoration: none;">Book Calendly Call</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>© 2024 Michael (Emmanuel Oluwasegun Taiwo). All Rights Reserved.</p>
+                <p style="margin-top: 10px; font-size: 13px; color: var(--gray-dark);">
+                    Building the future with artificial intelligence and automation
+                </p>
+            </div>
+        </div>
     </footer>
-
+    
+    <!-- Omni AI Chat Widget -->
     <div class="action-pillar">
-        <a href="https://wa.me/2348120505881" target="_blank" class="float-btn bg-wa">
+        <a href="https://wa.me/2348120505881" target="_blank" class="float-btn float-btn-wa">
             <i class="fab fa-whatsapp"></i>
         </a>
-        <button onclick="toggleChat()" class="float-btn bg-omni">
+        <button onclick="toggleChat()" class="float-btn float-btn-omni">
             <i class="fas fa-robot"></i>
         </button>
     </div>
-
+    
+    <!-- Chat Window -->
     <div id="chat-window">
-        <div class="p-6 bg-indigo-600 flex justify-between items-center text-white">
-            <div class="flex items-center gap-3">
-                <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+        <div class="chat-header">
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <div style="width: 8px; height: 8px; background: #10b981; border-radius: 50%;"></div>
                 <div>
-                    <span class="font-bold block leading-tight">Omni Core AI</span>
-                    <span class="text-[10px] text-yellow-300 font-bold tracking-widest uppercase"><i class="fas fa-star mr-1"></i> Happy New Year 2025</span>
+                    <div style="font-weight: bold;">Omni Core AI</div>
+                    <div style="font-size: 10px; color: #fbbf24; font-weight: bold; text-transform: uppercase;">
+                        <i class="fas fa-star" style="margin-right: 4px;"></i> Online
+                    </div>
                 </div>
             </div>
-            <button onclick="toggleChat()" class="opacity-70 hover:opacity-100"><i class="fas fa-times"></i></button>
+            <button onclick="toggleChat()" style="background: none; border: none; color: white; opacity: 0.7; cursor: pointer;">
+                <i class="fas fa-times"></i>
+            </button>
         </div>
-
+        
         <div id="limit-bar">FREE TRIAL CREDITS: 6 / 6</div>
-
-        <div id="chat-history" class="flex-grow p-6 overflow-y-auto space-y-4 text-sm bg-gray-950">
-            <div class="bg-gray-800 p-4 rounded-2xl rounded-tl-none max-w-[85%] text-gray-200">
+        
+        <div id="chat-history">
+            <div class="chat-message bot">
                 I am Omni. I help developers and creators scale with AI. 
                 What platform can I automate for you today?
             </div>
         </div>
-
-        <div id="input-container" class="p-4 bg-gray-900 border-t border-white/5 flex gap-3">
-            <input type="text" id="user-input" placeholder="Ask Omni anything..." class="flex-grow bg-transparent outline-none text-sm text-white">
-            <button onclick="sendMessage()" class="text-indigo-500 hover:text-indigo-400 transition">
-                <i class="fas fa-paper-plane text-lg"></i>
+        
+        <div id="input-container" class="chat-input-container">
+            <input type="text" id="user-input" placeholder="Ask Omni anything..." class="form-control">
+            <button onclick="sendMessage()" style="background: var(--primary); color: white; border: none; border-radius: 12px; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+                <i class="fas fa-paper-plane"></i>
             </button>
         </div>
-
+        
         <div id="limit-overlay">
-            <div class="text-red-400 font-bold mb-2">TRIAL LIMIT REACHED</div>
-            <p class="text-xs text-gray-400 mb-4">You have used your 6 free messages. Upgrade now for unlimited AI access.</p>
+            <div style="color: #ef4444; font-weight: bold; margin-bottom: 8px;">TRIAL LIMIT REACHED</div>
+            <p style="font-size: 12px; color: var(--gray); margin-bottom: 16px;">
+                You have used your 6 free messages. Upgrade now for unlimited AI access.
+            </p>
             <a href="https://wa.me/2348120505881?text=Hi%20Omni%20sent%20me!%20I%20am%20ready%20to%20start." 
                target="_blank" 
-               class="inline-block w-full py-3 bg-green-500 rounded-xl font-bold text-white text-sm hover:bg-green-600 transition">
-               <i class="fab fa-whatsapp mr-2"></i> Message Developer
+               style="display: inline-block; width: 100%; padding: 12px; background: #25d366; border-radius: 12px; font-weight: bold; color: white; text-align: center; text-decoration: none;">
+               <i class="fab fa-whatsapp" style="margin-right: 8px;"></i> Message Developer
             </a>
         </div>
     </div>
-<script>
-        // --- NEW YEAR CELEBRATION LOGIC ---
-        function createConfetti() {
-            const colors = ['#4f46e5', '#fbbf24', '#ffffff', '#25d366']; 
-            const container = document.getElementById('confetti-container');
-            if(container && container.children.length > 80) return; 
 
-            const el = document.createElement('div');
-            el.classList.add('confetti');
-            el.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-            el.style.left = Math.random() * 100 + 'vw';
-            el.style.top = -10 + 'px';
-            el.style.animationDuration = (Math.random() * 4 + 3) + 's'; 
-            el.style.opacity = Math.random() * 0.7; 
-            el.style.transform = `scale(${Math.random()})`;
-            if(container) container.appendChild(el);
-
-            setTimeout(() => { el.remove(); }, 7000);
-        }
-
-        let confettiInterval;
-        window.addEventListener('load', () => {
-            if(document.getElementById('confetti-container')) {
-                confettiInterval = setInterval(createConfetti, 150);
+    <script>
+        // Enhanced 3D Background
+        function initThreeJS() {
+            const canvas = document.getElementById('threeCanvas');
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ 
+                alpha: true, 
+                antialias: true,
+                powerPreference: "high-performance"
+            });
+            
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            canvas.appendChild(renderer.domElement);
+            
+            // Create floating particles
+            const particlesCount = 2000;
+            const positions = new Float32Array(particlesCount * 3);
+            
+            for (let i = 0; i < particlesCount * 3; i += 3) {
+                positions[i] = (Math.random() - 0.5) * 100;
+                positions[i + 1] = (Math.random() - 0.5) * 100;
+                positions[i + 2] = (Math.random() - 0.5) * 100;
             }
-        });
-
-     
-        // --- CHAT LOGIC ---
+            
+            const particlesGeometry = new THREE.BufferGeometry();
+            particlesGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            
+            const particlesMaterial = new THREE.PointsMaterial({
+                size: 0.05,
+                color: 0x4f46e5,
+                transparent: true,
+                opacity: 0.6,
+                sizeAttenuation: true
+            });
+            
+            const particles = new THREE.Points(particlesGeometry, particlesMaterial);
+            scene.add(particles);
+            
+            // Create geometric shapes
+            const torusGeometry = new THREE.TorusGeometry(1, 0.4, 16, 100);
+            const torusMaterial = new THREE.MeshBasicMaterial({
+                color: 0x9d4edd,
+                wireframe: true,
+                transparent: true,
+                opacity: 0.2
+            });
+            
+            const toruses = [];
+            for (let i = 0; i < 5; i++) {
+                const torus = new THREE.Mesh(torusGeometry, torusMaterial);
+                torus.position.x = (Math.random() - 0.5) * 40;
+                torus.position.y = (Math.random() - 0.5) * 40;
+                torus.position.z = (Math.random() - 0.5) * 40;
+                torus.scale.setScalar(Math.random() * 0.8 + 0.4);
+                torus.rotationSpeed = {
+                    x: Math.random() * 0.01,
+                    y: Math.random() * 0.01,
+                    z: Math.random() * 0.01
+                };
+                scene.add(torus);
+                toruses.push(torus);
+            }
+            
+            camera.position.z = 5;
+            
+            // Mouse movement effect
+            let mouseX = 0;
+            let mouseY = 0;
+            
+            document.addEventListener('mousemove', (event) => {
+                mouseX = (event.clientX / window.innerWidth) * 2 - 1;
+                mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
+            });
+            
+            // Animation loop
+            function animate() {
+                requestAnimationFrame(animate);
+                
+                particles.rotation.x += 0.0003;
+                particles.rotation.y += 0.0005;
+                
+                toruses.forEach(torus => {
+                    torus.rotation.x += torus.rotationSpeed.x;
+                    torus.rotation.y += torus.rotationSpeed.y;
+                    torus.rotation.z += torus.rotationSpeed.z;
+                });
+                
+                // Mouse interaction
+                camera.position.x += (mouseX * 0.5 - camera.position.x) * 0.05;
+                camera.position.y += (mouseY * 0.5 - camera.position.y) * 0.05;
+                camera.lookAt(scene.position);
+                
+                renderer.render(scene, camera);
+            }
+            
+            animate();
+            
+            // Handle window resize
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+        }
+        
+        // Chat Logic - Omni AI
         const chatWindow = document.getElementById('chat-window');
-        const history = document.getElementById('chat-history');
-        const input = document.getElementById('user-input');
-        const sessionId = "omni_web_" + Math.random().toString(36).substr(2, 9);
+        const chatHistory = document.getElementById('chat-history');
+        const userInput = document.getElementById('user-input');
         const MAX_MESSAGES = 6;
-        const STORAGE_KEY = 'omni_chat_count_v1';
+        const STORAGE_KEY = 'omni_chat_count_v2';
         let msgCount = localStorage.getItem(STORAGE_KEY) ? parseInt(localStorage.getItem(STORAGE_KEY)) : 0;
-
+        
         updateLimitUI();
-
-        function toggleChat() { chatWindow.classList.toggle('active'); }
-
+        
+        function toggleChat() { 
+            chatWindow.classList.toggle('active'); 
+        }
+        
         async function sendMessage() {
-            if (msgCount >= MAX_MESSAGES) { updateLimitUI(); return; }
-            const text = input.value.trim();
+            if (msgCount >= MAX_MESSAGES) { 
+                updateLimitUI(); 
+                return; 
+            }
+            
+            const text = userInput.value.trim();
             if (!text) return;
             
-            appendMessage(text, 'user');
-            input.value = '';
+            // Add user message
+            const userMsg = document.createElement('div');
+            userMsg.className = 'chat-message user';
+            userMsg.textContent = text;
+            chatHistory.appendChild(userMsg);
+            
+            userInput.value = '';
             msgCount++;
             localStorage.setItem(STORAGE_KEY, msgCount);
             updateLimitUI();
-
+            
+            // Add thinking indicator
+            const thinkingMsg = document.createElement('div');
+            thinkingMsg.className = 'chat-message bot';
+            thinkingMsg.innerHTML = '<i>Omni is thinking...</i>';
+            chatHistory.appendChild(thinkingMsg);
+            
+            chatHistory.scrollTop = chatHistory.scrollHeight;
+            
             try {
                 const response = await fetch('https://artifexai.app.n8n.cloud/webhook/omni-chat', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message: text, sessionId: sessionId })
+                    body: JSON.stringify({ 
+                        message: text, 
+                        sessionId: "omni_web_" + Math.random().toString(36).substr(2, 9) 
+                    })
                 });
+                
                 const data = await response.text();
-                appendMessage(data, 'bot');
+                
+                // Remove thinking message
+                thinkingMsg.remove();
+                
+                // Add bot response
+                const botMsg = document.createElement('div');
+                botMsg.className = 'chat-message bot';
+                
+                // Clean the response
+                let cleanText = data
+                    .replace(/```html/g, "")
+                    .replace(/```/g, "")
+                    .replace(/href="\[(.*?)\]"/g, 'href="$1"');
+                
+                botMsg.innerHTML = cleanText;
+                chatHistory.appendChild(botMsg);
+                
             } catch (err) {
-                appendMessage("Syncing with core... please repeat your message.", 'bot');
+                thinkingMsg.remove();
+                
+                const errorMsg = document.createElement('div');
+                errorMsg.className = 'chat-message bot';
+                errorMsg.textContent = "Syncing with core... please repeat your message.";
+                chatHistory.appendChild(errorMsg);
             }
-        }
-
-        // --- FIXED MESSAGE FUNCTION ---
-        function appendMessage(text, side) {
-            const div = document.createElement('div');
-            div.className = side === 'user' 
-                ? "bg-indigo-600 p-4 rounded-2xl rounded-tr-none self-end ml-auto shadow-lg" 
-                : "bg-gray-800 p-4 rounded-2xl rounded-tl-none max-w-[85%] text-gray-200";
             
-            // 1. Remove Markdown code blocks
-            let cleanText = text.replace(/```html/g, "").replace(/```/g, "");
-
-            // 2. CRITICAL FIX: Remove brackets [] from inside href links
-            // This turns <a href="[https://...]" into <a href="https://..."
-            cleanText = cleanText.replace(/href="\[(.*?)\]"/g, 'href="$1"');
-
-            div.innerHTML = cleanText;
-            history.appendChild(div);
-            history.scrollTop = history.scrollHeight;
+            chatHistory.scrollTop = chatHistory.scrollHeight;
         }
-
+        
         function updateLimitUI() {
             const remaining = MAX_MESSAGES - msgCount;
             const bar = document.getElementById('limit-bar');
-            if(bar) bar.textContent = `FREE TRIAL CREDITS: ${remaining} / ${MAX_MESSAGES}`;
             
-            if (msgCount >= MAX_MESSAGES) {
-                if(bar) { bar.style.color = '#f87171'; bar.textContent = "LIMIT REACHED"; }
-                if(document.getElementById('input-container')) document.getElementById('input-container').style.display = 'none';
-                if(document.getElementById('limit-overlay')) document.getElementById('limit-overlay').style.display = 'block';
-            } else {
-                if(bar) bar.style.color = '#a5b4fc';
-                if(document.getElementById('input-container')) document.getElementById('input-container').style.display = 'flex';
-                if(document.getElementById('limit-overlay')) document.getElementById('limit-overlay').style.display = 'none';
+            if (bar) {
+                bar.textContent = `FREE TRIAL CREDITS: ${remaining} / ${MAX_MESSAGES}`;
+                
+                if (msgCount >= MAX_MESSAGES) {
+                    bar.style.color = '#ef4444';
+                    bar.textContent = "LIMIT REACHED";
+                    document.getElementById('input-container').style.display = 'none';
+                    document.getElementById('limit-overlay').style.display = 'block';
+                } else {
+                    bar.style.color = '#a5b4fc';
+                    document.getElementById('input-container').style.display = 'flex';
+                    document.getElementById('limit-overlay').style.display = 'none';
+                }
             }
         }
-
-        function resetLimit() {
-            localStorage.setItem(STORAGE_KEY, 0);
-            location.reload();
+        
+        // Header Scroll Effect
+        window.addEventListener('scroll', () => {
+            const header = document.getElementById('header');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+            
+            // Update active nav link
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('.nav-link');
+            
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - 100;
+                const sectionHeight = section.clientHeight;
+                if (window.scrollY >= sectionTop && window.scrollY < sectionTop + sectionHeight) {
+                    current = section.getAttribute('id');
+                }
+            });
+            
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active');
+                }
+            });
+        });
+        
+        // Mobile Menu
+        const hamburger = document.getElementById('hamburger');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const mobileMenuClose = document.getElementById('mobileMenuClose');
+        
+        hamburger.addEventListener('click', () => {
+            mobileMenu.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+        
+        mobileMenuClose.addEventListener('click', () => {
+            mobileMenu.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        });
+        
+        // Close mobile menu on link click
+        document.querySelectorAll('.mobile-menu .nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            });
+        });
+        
+        // Smooth Scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const href = this.getAttribute('href');
+                if (href === '#') return;
+                
+                e.preventDefault();
+                const targetElement = document.querySelector(href);
+                if (targetElement) {
+                    const headerHeight = document.getElementById('header').offsetHeight;
+                    const targetPosition = targetElement.offsetTop - headerHeight;
+                    
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        // Enter key for chat
+        if (userInput) {
+            userInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') sendMessage();
+            });
         }
-
-        if(input) input.addEventListener("keypress", (e) => { if (e.key === "Enter") sendMessage(); });
+        
+        // Initialize everything
+        document.addEventListener('DOMContentLoaded', () => {
+            initThreeJS();
+            
+            // Add loading animation
+            document.body.style.opacity = '0';
+            setTimeout(() => {
+                document.body.style.transition = 'opacity 0.5s ease';
+                document.body.style.opacity = '1';
+            }, 100);
+            
+            // Auto-open chat on page load (after 3 seconds)
+            setTimeout(() => {
+                if (msgCount < MAX_MESSAGES) {
+                    toggleChat();
+                }
+            }, 3000);
+        });
     </script>
 </body>
 </html>
-
-
