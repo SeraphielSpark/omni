@@ -26,11 +26,11 @@
 </head>
 <body class="bg-slate-50 text-slate-900 antialiased font-sans flex flex-col min-h-screen">
 
+    <!-- NAVIGATION BAR -->
     <header class="w-full bg-white border-b border-slate-200 py-4 px-6 md:px-12 flex justify-between items-center fixed top-0 left-0 z-40 shadow-sm">
         <div class="flex items-center space-x-3">
-            <div class="h-8 w-8 bg-blue-700 rounded-sm flex items-center justify-center">
-                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-            </div>
+            <!-- Brand Logo -->
+            <img src="https://media.licdn.com/dms/image/v2/D4D0BAQHKFaAJV_zrnQ/company-logo_100_100/company-logo_100_100/0/1737482103001/mepaenergysystems_logo?e=1782950400&v=beta&t=Av0FeVKtokDpG1FTV7P0PEU3SAL4E_EBEBwMYXnzUcY" alt="Mepa Energy Systems Logo" class="h-8 w-8 rounded-sm object-cover">
             <span class="font-black tracking-tight text-xl text-slate-900">MEPA ENERGY</span>
         </div>
         <nav class="hidden md:flex space-x-8 text-sm font-semibold text-slate-600">
@@ -43,6 +43,7 @@
         </button>
     </header>
 
+    <!-- HERO SECTION -->
     <main class="flex-grow pt-24">
         <section class="bg-slate-900 text-white py-24 px-6 relative overflow-hidden">
             <div class="absolute inset-0 opacity-20 bg-[url('https://images.unsplash.com/photo-1513828583688-c52646db42da?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center"></div>
@@ -66,12 +67,14 @@
             </div>
         </section>
 
+        <!-- SERVICES GRID -->
         <section class="py-20 px-6 max-w-6xl mx-auto" id="generators">
             <div class="text-center mb-16">
                 <h2 class="text-3xl font-black text-slate-900 mb-4">Enterprise-Grade Solutions</h2>
                 <p class="text-slate-500 max-w-2xl mx-auto">Built for maximum uptime. We engineer power configurations tailored strictly to your operational load.</p>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Card 1 -->
                 <div class="bg-white p-8 rounded-xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
                     <div class="w-12 h-12 bg-blue-100 text-blue-700 rounded-lg flex items-center justify-center mb-6">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
@@ -79,6 +82,7 @@
                     <h3 class="text-xl font-bold mb-3">Diesel Generators</h3>
                     <p class="text-slate-600 text-sm leading-relaxed">Heavy-duty Cummins and Perkins powered gensets ranging from 50kVA to 2000kVA for prime and standby power.</p>
                 </div>
+                <!-- Card 2 -->
                 <div class="bg-white p-8 rounded-xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
                     <div class="w-12 h-12 bg-yellow-100 text-yellow-600 rounded-lg flex items-center justify-center mb-6">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
@@ -86,6 +90,7 @@
                     <h3 class="text-xl font-bold mb-3">Hybrid Solar Grids</h3>
                     <p class="text-slate-600 text-sm leading-relaxed">Reduce diesel dependency by up to 60% with smart-switching solar arrays designed for commercial rooftops.</p>
                 </div>
+                <!-- Card 3 -->
                 <div class="bg-white p-8 rounded-xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
                     <div class="w-12 h-12 bg-green-100 text-green-600 rounded-lg flex items-center justify-center mb-6">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
@@ -97,25 +102,29 @@
         </section>
     </main>
 
+    <!-- FOOTER -->
     <footer class="bg-slate-950 text-slate-400 py-12 px-6 border-t border-slate-900">
         <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center">
             <div class="flex items-center space-x-2 mb-4 md:mb-0">
-                <div class="h-6 w-6 bg-blue-700 rounded-sm"></div>
+                <img src="https://media.licdn.com/dms/image/v2/D4D0BAQHKFaAJV_zrnQ/company-logo_100_100/company-logo_100_100/0/1737482103001/mepaenergysystems_logo?e=1782950400&v=beta&t=Av0FeVKtokDpG1FTV7P0PEU3SAL4E_EBEBwMYXnzUcY" alt="Mepa Logo" class="h-6 w-6 rounded-sm object-cover grayscale opacity-75">
                 <span class="font-bold text-white tracking-wider">MEPA ENERGY</span>
             </div>
             <p class="text-sm">© 2026 Mepa Energy Systems. All rights reserved.</p>
         </div>
     </footer>
 
+    <!-- FLOATING CHAT BUTTON -->
     <button onclick="toggleChat(true)" class="fixed bottom-6 right-6 bg-blue-700 text-white p-4 rounded-full shadow-2xl hover:bg-blue-800 transition-transform transform hover:scale-105 z-40">
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>
     </button>
 
+    <!-- RIGHT-SIDE CHAT MODAL -->
     <div id="chatModal" class="fixed inset-y-0 right-0 w-full md:w-[420px] bg-white shadow-2xl z-50 transform translate-x-full transition-transform duration-300 ease-out border-l border-slate-200 flex flex-col">
+        <!-- Chat Header -->
         <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-white shadow-sm z-10">
             <div class="flex items-center space-x-3">
                 <div class="relative">
-                    <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-700 font-bold">ME</div>
+                    <img src="https://media.licdn.com/dms/image/v2/D4D0BAQHKFaAJV_zrnQ/company-logo_100_100/company-logo_100_100/0/1737482103001/mepaenergysystems_logo?e=1782950400&v=beta&t=Av0FeVKtokDpG1FTV7P0PEU3SAL4E_EBEBwMYXnzUcY" alt="Mepa Logo" class="w-10 h-10 rounded-full object-cover border border-slate-200">
                     <div class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></div>
                 </div>
                 <div>
@@ -128,7 +137,9 @@
             </button>
         </div>
 
+        <!-- Chat Logs Container -->
         <div id="chatWindow" class="flex-1 p-5 overflow-y-auto space-y-4 bg-slate-50 text-sm">
+            <!-- Initial Bot Message -->
             <div class="flex items-start mb-4">
                 <div class="bg-white border border-slate-200 text-slate-800 p-3.5 rounded-2xl rounded-tl-sm max-w-[85%] font-medium shadow-sm leading-relaxed">
                     Hello. I am the digital engineering consultant for Mepa Energy Systems. What type of capacity or solution are you planning for your facility today?
@@ -136,6 +147,7 @@
             </div>
         </div>
 
+        <!-- Input Area -->
         <div class="p-4 bg-white border-t border-slate-200">
             <div class="flex items-center bg-slate-100 p-1.5 rounded-full border border-slate-200 focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-100 transition-all">
                 <input id="userInput" type="text" placeholder="E.g., Need a 250kVA generator..." class="flex-1 bg-transparent border-0 outline-none px-4 py-2 text-sm text-slate-900 placeholder-slate-500 focus:ring-0" onkeydown="if(event.key === 'Enter') sendMessage()">
@@ -143,7 +155,7 @@
                     <svg class="w-4 h-4 translate-x-px" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>
                 </button>
             </div>
-            <p class="text-[10px] text-center text-slate-400 mt-3 font-medium uppercase tracking-wider">Powered by Emmanuel Oluwasegun Taiwo</p>
+            <p class="text-[10px] text-center text-slate-400 mt-3 font-medium uppercase tracking-wider">Powered by n8n Intelligence</p>
         </div>
     </div>
 
